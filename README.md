@@ -53,7 +53,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/c
 
 
 
-### Making a Progressive Web App
+### MTo ja usunąłem - Patryk
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
 
