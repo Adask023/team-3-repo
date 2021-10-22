@@ -1,23 +1,16 @@
 import React from "react";
-import { gql, useQuery } from "@apollo/client"
+import useAllEntries from "../../queries/useAllEntries";
 
-const GET_ALL_ENTRIES = gql`
-query GetAllEntries {
-	entryMany {
-    startTime
-    endTime
-    tag {
-      name
-    }
-  }
-}`
 
 const Entries = () => {
-    const values = useQuery(GET_ALL_ENTRIES);
-    console.log(values.data);
+    const {data, loading, error} = useAllEntries();
+    console.log(data);
+    if (loading) return <div>loading...</div>
+    if (error) return <div>Error</div>
+
     return( 
         <div>
-            {values.data?.entryMany.map((singleEntry) => {
+            {data?.map((singleEntry) => {
                 return (
                     <div>
                         <span>startTime: {singleEntry.startTime}</span>
