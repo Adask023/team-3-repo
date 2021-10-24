@@ -1,14 +1,13 @@
-import logo from './logo.svg';
 import './App.css';
-import Entries from './components/Entries';
-import NewEntry from './components/NewEntry';
+import { Login, MainView } from "./Pages"
 
 function App() {
+  const login = localStorage.getItem("login");
+
+
   return (
     <div className="App">
-      <NewEntry />
-      
-      <Entries />
+      {login ? <MainView /> : <Login />}
     </div>
   );
 }
