@@ -1,13 +1,17 @@
 import { gql, useQuery } from "@apollo/client";
-import React from "react";
+import React, { useContext } from "react";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 
+// import UserInfoContext from "../../../context/UserInfoContext";
+import UserInfoContext from "../../../context/UserInfoContext";
+
 const GET_BUNDLE_BY_ID = gql`
-  query getBundle($bundleSetId: MongoID) {
+  query getBundle($bundleSetId: MongoID!) {
     tagBundleById(_id: $bundleSetId) {
       name
       description
+      creatorId
       tags {
         name
         _id
@@ -16,51 +20,51 @@ const GET_BUNDLE_BY_ID = gql`
   }
 `;
 
-// "61719b8df1bb107cb9040d1f"
-
-// NOTATKI: popsuty request do naprawy + dodanie zmiennych!
-
-// _id: $id
-
-// , {
-//     variables: {
-//       id: _id
-//     },
-//   }
-
 function BundleItem() {
   let { _id } = useParams();
-  console.log(_id);
-  const { data, loading, error } = useQuery(GET_BUNDLE_BY_ID, {
-    variables: { bundleSetId: "61719b8df1bb107cb9040d1f" },
-  });
 
-  //   const { data, loading, error } = getBundleById({
-  //     variables: {
-  //       _id: _id
-  //     },
-  //   });
+  const { userInfo } = useContext(UserInfoContext);
+
+  // console.log(_id);
+  const { data, loading, error } = useQuery(GET_BUNDLE_BY_ID, {
+    variables: { bundleSetId: _id },
+  });
+  console.log(userInfo);
 
   if (loading) return <div>loading...</div>;
   if (error) return <div>error</div>;
-  console.log(data);
-  console.log(data.tagBundleById.name);
 
-  const tags = data.tagBundleById.tags.map(({ name, _id }) => {
-    return <li key={_id}>{name}</li>;
+  const { description, tags, creatorId } = data.tagBundleById;
+
+  const tagsToDisplay = tags.map(({ name, _id }) => {
+    return (
+      <li key={_id}>
+        {name} id: {_id}
+      </li>
+    );
   });
-  console.log(data.tagBundleById.tags[0].name);
+  // console.log(data.tagBundleById.tags[0].name);
 
   return (
     <div>
-      <Link to="/">
+      <Link to="/bundle">
         <button>Back</button>
       </Link>
       <br />
       bundle id: {_id}
       <br />
+      Creator id: {creatorId}
+      <br />
+      <h2>Description</h2>
+      <div>{description}</div>
+      <br />
+      <br />
       One bundle with all tags:
-      <ul>{tags}</ul>
+      <ul>
+        {tagsToDisplay.length > 0
+          ? tagsToDisplay
+          : "no tags available for this tag bundle"}
+      </ul>
     </div>
   );
 }

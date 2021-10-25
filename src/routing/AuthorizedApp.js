@@ -15,7 +15,7 @@ export const AuthorizedApp = () => {
       <Switch>
         <Route exact path={ROUTES.START} />
         <Route path={ROUTES.CALENDAR} component={Calendar} />
-        <Route path={ROUTES.BUNDLE} component={Bundle} />
+        <Route exact path={ROUTES.BUNDLE} component={Bundle} />
         <Route path={ROUTES.BUNDLE_ITEM} component={BundleItem} />
         <Route path={ROUTES.SETTINGS} component={Settings} />
         <Route exact path={ROUTES.NOT_FOUND} component={PageNotFound} />

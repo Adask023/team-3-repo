@@ -4,7 +4,7 @@ import { useState } from "react";
 
 export const NewEntry = () => {
   const [entryValue, setEntryValue] = useState("");
-  const [addEntry, { loading, error }] = useMutation(CREATE_QUERY);
+  const [addEntry] = useMutation(CREATE_QUERY);
 
   const handleSubmit = (e) => {
     e.preventDefault();
