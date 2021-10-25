@@ -4,8 +4,11 @@
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.4.16",
+    "@date-io/date-fns": "^2.11.0",
     "@emotion/react": "^11.5.0",
     "@emotion/styled": "^11.3.0",
+    "@mui/lab": "^5.0.0-alpha.51",
+    "date-fns": "2.13.0",
     "@mui/material": "^5.0.4",
     "@mui/styles": "^5.0.1",
     "@testing-library/jest-dom": "^5.14.1",
