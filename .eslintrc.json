@@ -7,7 +7,12 @@
   "plugins": ["prettier", "react", "react-hooks", "simple-import-sort"],
   "rules": {
     "no-console": "warn",
-    "prettier/prettier": "error",
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ],
     "react/display-name": "off",
     "react/no-children-prop": "off",
     "react/react-in-jsx-scope": "warn",
