@@ -1,31 +1,20 @@
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import DatePicker from "@mui/lab/DatePicker";
-import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import { TextField } from "@mui/material";
+/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 
-import { DateCarousel } from "../../components/DateCarousel/DateCarousel";
+import { DateCarousel } from "../../components/DatePicker/DateCarousel";
+import { MaterialDatePicker } from "../../components/DatePicker/MaterialDatePicker";
 import { Entries } from "../../components/Entries/Entries";
 import useAllEntries from "../../queries/useAllEntries";
 
+const now = new Date();
 export const Calendar = () => {
   const ee = useAllEntries();
-  const [value, setValue] = useState();
+  const [date, setDate] = useState(now);
   console.log(ee);
   return (
     <>
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <DatePicker
-          label="Wybierz datę"
-          value={value}
-          onChange={(newValue) => {
-            setValue(newValue);
-            console.log(newValue);
-          }}
-          renderInput={(params) => <TextField {...params} />}
-        />
-      </LocalizationProvider>
-      <DateCarousel onChange={setValue} />
+      <MaterialDatePicker onChange={setDate} />
+      <DateCarousel onChange={setDate} />
       <Entries></Entries>
     </>
   );
