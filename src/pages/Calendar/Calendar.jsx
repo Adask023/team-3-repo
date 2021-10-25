@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 
-import useAllEntries from "../../queries/useAllEntries";
-
+import UserInfoContext from "../../context/UserInfoContext";
+//TODO: add helmet for all pages
 export const Calendar = () => {
-  const ee = useAllEntries();
-  console.log(ee);
+  const { userInfo } = useContext(UserInfoContext);
+  console.log(userInfo);
   return <>CALENDAR</>;
 };
