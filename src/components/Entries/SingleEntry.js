@@ -1,4 +1,5 @@
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import {
   Autocomplete,
   Button,
@@ -20,6 +21,10 @@ export const SingleEntry = ({
   tagOptions,
   newEntryHandler,
 }) => {
+  const deleteEntryHandler = (e, id) => {
+    console.log(e, id);
+  };
+
   return (
     <Stack spacing={2} direction="row">
       <br></br>
@@ -52,6 +57,15 @@ export const SingleEntry = ({
       <Button onClick={newEntryHandler}>
         <AddCircleIcon></AddCircleIcon>
       </Button>
+      <Button onClick={(e, id) => deleteEntryHandler(e, id)}>
+        <DeleteForeverIcon></DeleteForeverIcon>
+      </Button>
     </Stack>
   );
 };
+
+`mutation deleteEntry($entryId: MongoID!) {
+  entryRemoveById(_id: $entryId){
+    recordId
+  }
+}`
