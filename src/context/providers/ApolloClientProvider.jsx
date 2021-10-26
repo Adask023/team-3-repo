@@ -8,24 +8,23 @@ import UserInfoContext from "../UserInfoContext";
 export const ApolloClientProvider = ({ children }) => {
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
 
-  const getUserName = (userInfo) => {
-    return userInfo.login ? userInfo.login : userInfo.oauthId;
-  };
-
-  const client = useMemo(() => {
-    return getNewClient(userInfo ? getUserName(userInfo) : "");
-  }, [userInfo]);
+  const client = useMemo(
+    () => getNewClient(userInfo ? userInfo.oauthId : ""),
+    [userInfo]
+  );
 
   useEffect(() => {
-    client
-      .query({
-        query: LOGIN,
-      })
-      .then((result) => {
-        if (result.data.getProfile.oauthId === userInfo?.login) {
-          setUserInfo(result.data.getProfile);
-        }
-      });
+    if (!userInfo?._id) {
+      client
+        .query({
+          query: LOGIN,
+        })
+        .then((result) => {
+          if (result.data.getProfile.oauthId === userInfo?.oauthId) {
+            setUserInfo(result.data.getProfile);
+          }
+        });
+    }
   }, [client, setUserInfo, userInfo]);
 
   return <ApolloProvider client={client}>{children}</ApolloProvider>;
