@@ -10,7 +10,7 @@ const useAllEntriesFilterByDate = (date) => {
 };
 
 export const GET_ALL_ENTRIES_FILTER_BY_DATE = gql`
-  query getallFiltered($date: Date) {
+  query getAllFiltered($date: Date) {
     entryMany(filter: { date: $date }) {
       _id
       startTime

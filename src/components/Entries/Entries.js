@@ -1,27 +1,29 @@
 import { Button, CircularProgress, Stack } from "@mui/material";
 import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
+import useCreateNewEntry from "../../mutations/useCreateNewEntry";
 
 import useAllEntriesFilterByDate from "../../queries/useAllEntriesFilterByDate";
+import { zeroPad } from "../../utils/dateUtils";
 import { SingleEntry } from "./SingleEntry";
 
 export const Entries = ({ date }) => {
   const { data, loading } = useAllEntriesFilterByDate(date);
+  const [addEntry] = useCreateNewEntry();
   const [entries, setEntries] = useState(data);
-  const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
     console.log(data);
     setEntries(data);
-    setEditMode(false);
   }, [data]);
 
   const addNewEntry = () => {
-    if (!editMode) {
-      const entryList = [...entries, {}];
-      setEntries(entryList);
-      setEditMode(true);
-    }
+    const dateNow = new Date();
+    const time = `${zeroPad(dateNow.getHours(), 2)}:${zeroPad(
+      dateNow.getMinutes(),
+      2
+    )}`;
+    addEntry({ variables: { record: { startTime: time } } });
   };
 
   return (
