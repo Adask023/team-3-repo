@@ -5,7 +5,7 @@ import { GET_ALL_ENTRIES_FILTER_BY_DATE } from "../queries/useAllEntriesFilterBy
 
 const useCreateNewEntry = () => {
   const [addEntry, { data, loading, error }] = useMutation(CREATE_NEW_ENTRY, {
-    refetchQueries: [GET_ALL_ENTRIES_FILTER_BY_DATE, "getallFiltered"],
+    refetchQueries: [GET_ALL_ENTRIES_FILTER_BY_DATE, "getAllFiltered"],
   });
   return [addEntry, { data, loading, error }];
 };
