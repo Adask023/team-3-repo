@@ -3,6 +3,7 @@ import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import DatePicker from "@mui/lab/DatePicker";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import { TextField } from "@mui/material";
+import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 
 export const MaterialDatePicker = ({ onDateChange, dateValue = null }) => {
@@ -17,7 +18,11 @@ export const MaterialDatePicker = ({ onDateChange, dateValue = null }) => {
     setValue(dateValue);
   }, [dateValue]);
   return (
-    <>
+    <Box
+      sx={{
+        m: 1,
+      }}
+    >
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <DatePicker
           label="Wybierz datę"
@@ -28,6 +33,6 @@ export const MaterialDatePicker = ({ onDateChange, dateValue = null }) => {
           renderInput={(params) => <TextField {...params} />}
         />
       </LocalizationProvider>
-    </>
+    </Box>
   );
 };

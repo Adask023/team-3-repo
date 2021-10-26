@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable no-unused-vars */
 import { Button } from "@mui/material";
+import { Box } from "@mui/system";
 import { useEffect, useMemo, useState } from "react";
 
 export const DateCarousel = ({ onDateChange, dateValue }) => {
@@ -35,10 +36,18 @@ export const DateCarousel = ({ onDateChange, dateValue }) => {
   };
 
   return (
-    <>
+    <Box
+      sx={{
+        border: 1,
+        p: 1,
+        m: 1,
+        width: "fit-content",
+        borderColor: "primary.main",
+      }}
+    >
       <Button onClick={(e) => handleDayChange(e, -1)}>Prev</Button>
-      {value.toLocaleString()}
+      <span>{value.toLocaleString()}</span>
       <Button onClick={(e) => handleDayChange(e, 1)}>Next</Button>
-    </>
+    </Box>
   );
 };
