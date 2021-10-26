@@ -19,7 +19,7 @@ export const Login = () => {
   const logIn = useCallback(
     ({ login }) => {
       setUserInfo({
-        login,
+        oauthId: login,
       });
     },
     [setUserInfo]

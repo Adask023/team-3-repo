@@ -9,20 +9,22 @@ export const ApolloClientProvider = ({ children }) => {
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
 
   const client = useMemo(
-    () => getNewClient(userInfo ? userInfo.login : ""),
+    () => getNewClient(userInfo ? userInfo.oauthId : ""),
     [userInfo]
   );
 
   useEffect(() => {
-    client
-      .query({
-        query: LOGIN,
-      })
-      .then((result) => {
-        if (result.data.getProfile.oauthId === userInfo?.login) {
-          setUserInfo(result.data.getProfile);
-        }
-      });
+    if (!userInfo?._id) {
+      client
+        .query({
+          query: LOGIN,
+        })
+        .then((result) => {
+          if (result.data.getProfile.oauthId === userInfo?.oauthId) {
+            setUserInfo(result.data.getProfile);
+          }
+        });
+    }
   }, [client, setUserInfo, userInfo]);
 
   return <ApolloProvider client={client}>{children}</ApolloProvider>;
