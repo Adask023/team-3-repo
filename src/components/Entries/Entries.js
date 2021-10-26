@@ -1,13 +1,19 @@
-import useGetAllEntries from "../../queries/useAllEntries";
+import { useEffect } from "react";
 
-export const Entries = () => {
-  const { data } = useGetAllEntries();
+import useAllEntriesFilterByDate from "../../queries/useAllEntriesFilterByDate";
+
+export const Entries = ({ date }) => {
+  const { data } = useAllEntriesFilterByDate(date);
+
+  useEffect(() => {
+    console.log(date);
+  });
 
   return (
     <>
-      {data?.entryMany.map((e) => (
+      {data?.map((e) => (
         <p key={e._id}>
-          {e.tag.name} {e._id}
+          {e.tag.name} {e._id} {e.createdAt}
         </p>
       ))}
     </>

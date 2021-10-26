@@ -9,16 +9,14 @@ import { formatDate } from "../../utils/dateUtils";
 
 const now = new Date();
 export const Calendar = () => {
-  const ee = useAllEntries();
   const [date, setDate] = useState(now);
   const handleDateChange = (date) => {
     setDate(date);
   };
 
   useEffect(() => {
-    console.log(formatDate(date));
+    console.log("hey");
   }, [date]);
-  console.log(ee);
 
   return (
     <>
@@ -30,7 +28,7 @@ export const Calendar = () => {
         onDateChange={(newDate) => handleDateChange(newDate)}
         dateValue={date}
       />
-      <Entries></Entries>
+      <Entries date={formatDate(date)}></Entries>
     </>
   );
 };
