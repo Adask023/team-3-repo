@@ -16,8 +16,12 @@ export const GET_ALL_ENTRIES_FILTER_BY_DATE = gql`
       startTime
       endTime
       createdAt
+      order
       tag {
         name
+        tagBundle {
+          name
+        }
       }
     }
   }
