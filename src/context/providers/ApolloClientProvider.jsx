@@ -8,10 +8,13 @@ import UserInfoContext from "../UserInfoContext";
 export const ApolloClientProvider = ({ children }) => {
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
 
-  const client = useMemo(
-    () => getNewClient(userInfo ? userInfo.login : ""),
-    [userInfo]
-  );
+  const getUserName = (userInfo) => {
+    return userInfo.login ? userInfo.login : userInfo.oauthId;
+  };
+
+  const client = useMemo(() => {
+    return getNewClient(userInfo ? getUserName(userInfo) : "");
+  }, [userInfo]);
 
   useEffect(() => {
     client
