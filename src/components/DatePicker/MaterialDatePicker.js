@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 export const MaterialDatePicker = ({ onDateChange, dateValue = null }) => {
   const [value, setValue] = useState();
   const handleChange = (newValue) => {
-    console.log(newValue);
     setValue(newValue);
     if (onDateChange) {
       onDateChange(newValue);

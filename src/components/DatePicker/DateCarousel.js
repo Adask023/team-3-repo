@@ -8,7 +8,6 @@ export const DateCarousel = ({ onDateChange, dateValue }) => {
   const [value, setValue] = useState(now);
 
   useEffect(() => {
-    console.log("received date from parent");
     if (dateValue) setValue(dateValue);
   }, [dateValue]);
 
