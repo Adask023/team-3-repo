@@ -1,8 +1,8 @@
 import { Button, CircularProgress, Stack } from "@mui/material";
 import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
-import useCreateNewEntry from "../../mutations/useCreateNewEntry";
 
+import useCreateNewEntry from "../../mutations/useCreateNewEntry";
 import useAllEntriesFilterByDate from "../../queries/useAllEntriesFilterByDate";
 import { zeroPad } from "../../utils/dateUtils";
 import { SingleEntry } from "./SingleEntry";

@@ -63,9 +63,3 @@ export const SingleEntry = ({
     </Stack>
   );
 };
-
-`mutation deleteEntry($entryId: MongoID!) {
-  entryRemoveById(_id: $entryId){
-    recordId
-  }
-}`
