@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 
 import { DateCarousel } from "../../components/DatePicker/DateCarousel";
@@ -14,7 +13,7 @@ export const Calendar = () => {
   };
 
   useEffect(() => {
-    console.log("hey");
+    console.log(`Calendar loaded for date: ${date.toLocaleString()}`);
   }, [date]);
 
   return (

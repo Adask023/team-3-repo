@@ -11,6 +11,8 @@ import {
   TextField,
 } from "@mui/material";
 
+import useDeleteEntry from "../../mutations/useDeleteEntry";
+
 export const SingleEntry = ({
   id,
   startTime,
@@ -19,10 +21,18 @@ export const SingleEntry = ({
   tagBundleOptions,
   tag,
   tagOptions,
+  order,
   newEntryHandler,
 }) => {
-  const deleteEntryHandler = (e, id) => {
-    console.log(e, id);
+  const [deleteEntry] = useDeleteEntry();
+
+  const deleteEntryHandler = () => {
+    console.log(id);
+    deleteEntry({
+      variables: {
+        entryId: id,
+      },
+    });
   };
 
   return (
@@ -54,10 +64,11 @@ export const SingleEntry = ({
         sx={{ width: 300 }}
         renderInput={(params) => <TextField {...params} label="Tag" />}
       />
+      {`order: ${order}`}
       <Button onClick={newEntryHandler}>
         <AddCircleIcon></AddCircleIcon>
       </Button>
-      <Button onClick={(e, id) => deleteEntryHandler(e, id)}>
+      <Button onClick={deleteEntryHandler}>
         <DeleteForeverIcon></DeleteForeverIcon>
       </Button>
     </Stack>

@@ -1,10 +1,11 @@
+
 import { Button, CircularProgress, Stack } from "@mui/material";
 import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
-
 import useCreateNewEntry from "../../mutations/useCreateNewEntry";
 import useAllEntriesFilterByDate from "../../queries/useAllEntriesFilterByDate";
 import { zeroPad } from "../../utils/dateUtils";
+// import { matchSorter } from "match-sorter";
 import { SingleEntry } from "./SingleEntry";
 
 export const Entries = ({ date }) => {
@@ -15,6 +16,7 @@ export const Entries = ({ date }) => {
   useEffect(() => {
     console.log(data);
     setEntries(data);
+    // console.log(matchSorter(data, { keys: ["order"] }));
   }, [data]);
 
   const addNewEntry = () => {
@@ -23,7 +25,17 @@ export const Entries = ({ date }) => {
       dateNow.getMinutes(),
       2
     )}`;
-    addEntry({ variables: { record: { startTime: time } } });
+    addEntry({
+      variables: {
+        record: { startTime: time, date: date, order: getNextOrderNo() },
+      },
+    });
+  };
+
+  const getNextOrderNo = () => {
+    if (entries.length == 0) return 0;
+    const maxOrderNo = entries.map((e) => e.order);
+    return maxOrderNo[maxOrderNo.length - 1] + 1;
   };
 
   return (
@@ -43,6 +55,7 @@ export const Entries = ({ date }) => {
             tagBundleOptions={["bundle", "b", "c"]}
             tag={"tag"}
             tagOptions={["tag", "b", "c"]}
+            order={e.order}
             newEntryHandler={addNewEntry}
           ></SingleEntry>
         ))}

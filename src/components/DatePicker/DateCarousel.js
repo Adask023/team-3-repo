@@ -1,7 +1,6 @@
-/* eslint-disable prettier/prettier */
-/* eslint-disable no-unused-vars */
 import { Button } from "@mui/material";
 import { Box } from "@mui/system";
+import { format } from "date-fns";
 import { useEffect, useMemo, useState } from "react";
 
 export const DateCarousel = ({ onDateChange, dateValue }) => {
@@ -46,7 +45,7 @@ export const DateCarousel = ({ onDateChange, dateValue }) => {
       }}
     >
       <Button onClick={(e) => handleDayChange(e, -1)}>Prev</Button>
-      <span>{value.toLocaleString()}</span>
+      <span spacing={1}>{format(value, "d MMMM yyyy (EEEE)")}</span>
       <Button onClick={(e) => handleDayChange(e, 1)}>Next</Button>
     </Box>
   );
