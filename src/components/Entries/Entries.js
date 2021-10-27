@@ -1,3 +1,5 @@
+/* eslint-disable */
+//FIXME:: imports
 import { Button, CircularProgress, Stack } from "@mui/material";
 import { Box } from "@mui/system";
 import { useEffect, useMemo, useState } from "react";
@@ -12,6 +14,7 @@ export const Entries = ({ date }) => {
   const [addEntry] = useCreateNewEntry();
   const [updateEntry] = useUpdateEntry();
   const [entries, setEntries] = useState(data);
+  const { userInfo } = useContext(UserInfoContext);
 
   const orderNoArray = useMemo(() => {
     if (!entries) return [0];
@@ -72,6 +75,18 @@ export const Entries = ({ date }) => {
       };
     });
   };
+  if (loading)
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
 
   return (
     <Box sx={{ pt: 5, display: "flex", flexDirection: "column" }}>
@@ -81,18 +96,18 @@ export const Entries = ({ date }) => {
 
       <Stack sx={{ pt: 5 }} spacing={4}>
         {entries?.map((e) => (
-          <SingleEntry
+          <MemoizedSingleEntry
             key={e._id}
             id={e._id}
             startTime={e.startTime}
             endTime={e.endTime}
             tagBundle={"bundle"}
-            tagBundleOptions={["bundle", "b", "c"]}
+            tagBundleOptions={userInfo.tagBundles}
             tag={"tag"}
             tagOptions={["tag", "b", "c"]}
             order={e.order}
             newEntryHandler={addNewEntry}
-          ></SingleEntry>
+          />
         ))}
       </Stack>
     </Box>

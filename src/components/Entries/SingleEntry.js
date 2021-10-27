@@ -16,8 +16,9 @@ import { useEffect, useState } from "react";
 import useDeleteEntry from "../../mutations/useDeleteEntry";
 import useUpdateEntry from "../../mutations/useUpdateEntry";
 import { currentTime } from "../../utils/dateUtils";
+import React from "react";
 
-export const SingleEntry = ({
+const SingleEntry = ({
   id,
   startTime = "",
   endTime = "",
@@ -89,9 +90,9 @@ export const SingleEntry = ({
           value={entryValues.tagBundle}
           name={"tagBundle"}
         >
-          {tagBundleOptions?.map((option, index) => (
-            <MenuItem value={option} key={index}>
-              {option}
+          {tagBundleOptions?.map(({ description, _id }) => (
+            <MenuItem value={description} key={_id}>
+              {description}
             </MenuItem>
           ))}
         </Select>
@@ -114,3 +115,5 @@ export const SingleEntry = ({
     </Stack>
   );
 };
+
+export const MemoizedSingleEntry = React.memo(SingleEntry);
