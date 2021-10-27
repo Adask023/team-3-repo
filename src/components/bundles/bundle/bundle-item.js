@@ -1,4 +1,5 @@
 import { gql, useQuery } from "@apollo/client";
+import { Container, Grid } from "@mui/material";
 import React, { useContext } from "react";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
@@ -36,24 +37,35 @@ function BundleItem() {
   if (loading) return <div>loading...</div>;
   if (error) return <div>error</div>;
 
-  const { description, creatorId } = data.tagBundleById;
+  const { name, description, creatorId } = data.tagBundleById;
 
   return (
-    <div>
-      <Link to="/bundle">
-        <button>Back</button>
-      </Link>
-      <br />
-      bundle id: {_id}
-      <br />
-      Creator id: {creatorId}
-      <br />
-      <h2>Description</h2>
-      <div>{description}</div>
-      <Description _id={_id} creatorId={creatorId} description={description} />
-      <br />
-      <BundleTagsPagination _id={_id} />
-    </div>
+    <Container>
+      <Grid container>
+        <Grid item xs={4} alignItems="center" justifyContent="center">
+          <Link to="/bundle">
+            <button>Back</button>
+          </Link>
+          <h1>{name}</h1>
+          <br />
+          bundle id: {_id}
+          <br />
+          Creator id: {creatorId}
+          <br />
+          <h2>Description</h2>
+          <div>{description}</div>
+        </Grid>
+        <Grid item xs={8} alignItems="center" justifyContent="center">
+          <Description
+            _id={_id}
+            creatorId={creatorId}
+            description={description}
+          />
+          <br />
+          <BundleTagsPagination _id={_id} />
+        </Grid>
+      </Grid>
+    </Container>
   );
 }
 
