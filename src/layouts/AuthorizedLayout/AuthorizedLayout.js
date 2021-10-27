@@ -5,9 +5,19 @@ import { Navbar } from "../../components/Navbar/Navbar";
 
 export const AuthorizedLayout = ({ children }) => {
   return (
-    <Box sx={{ p: 3 }}>
+    <>
       <Navbar />
-      {children}
-    </Box>
+      <Box
+        sx={{
+          p: 3,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        {children}
+      </Box>
+    </>
   );
 };

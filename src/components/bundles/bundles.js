@@ -1,5 +1,5 @@
 import { gql } from "@apollo/client";
-import { Container, List, ListItemButton, ListItemText } from "@mui/material";
+import { Container, Grid } from "@mui/material";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -36,17 +36,25 @@ const Bundles = () => {
         {isPopUpActive && <AddBundlePopUp setPopUpActive={setPopUpActive} />}
       </div>
       <h1>Bundles list:</h1>
-      <List>
+      <Grid container style={{ margin: "3rem 0" }}>
         {data.tagBundleMany.map(({ _id, name }) => {
           return (
-            <ListItemButton key={_id}>
-              <Link to={`/bundle/${_id}`}>
-                <ListItemText>{name}</ListItemText>
-              </Link>
-            </ListItemButton>
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              key={_id}
+              container
+              alignItems="center"
+              justifyContent="center"
+              style={{ marginBottom: "0.6rem" }}
+            >
+              <Link to={`/bundle/${_id}`}>{name}</Link>
+            </Grid>
           );
         })}
-      </List>
+      </Grid>
     </Container>
   );
 };
