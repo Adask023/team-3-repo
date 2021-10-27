@@ -1,6 +1,8 @@
 /* eslint-disable */
 import { gql, useMutation } from "@apollo/client";
-import React, { useState } from "react";
+import { TextField } from "@mui/material";
+import React, { useContext, useState } from "react";
+import UserInfoContext from "../../../context/UserInfoContext";
 
 const UPDATE_DESCRIPTION = gql`
   mutation updateDescription(
@@ -15,16 +17,16 @@ const UPDATE_DESCRIPTION = gql`
 
 function Description({ _id, creatorId, description }) {
   const [descriptionToChange, setDescriptionToChange] = useState(description);
+  const { userInfo } = useContext(UserInfoContext);
 
   const [updateDescription] = useMutation(UPDATE_DESCRIPTION, {
     variables: { record: { description: "To jest nowe description" } },
   });
-
-  const userId = "61671921b7efc009eaf79450";
+  
+  const userId = userInfo._id;
   const initDesc = description;
 
   const handleDescriptionChange = () => {
-    console.log("updated");
     updateDescription({
       variables: {
         id: _id,
@@ -34,7 +36,7 @@ function Description({ _id, creatorId, description }) {
     });
   };
 
-  console.log(descriptionToChange);
+  // console.log(descriptionToChange);
 
   return (
     <div>
@@ -59,6 +61,14 @@ function Description({ _id, creatorId, description }) {
       )}
     </div>
   );
+}
+{
+  /* <TextField
+  placeholder="MultiLine with rows: 2 and rowsMax: 4"
+  multiline
+  rows={2}
+  rowsMax={4}
+/>; */
 }
 
 export default Description;
