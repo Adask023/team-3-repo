@@ -74,7 +74,7 @@ export const Settings = () => {
   const handleFilter = (e) => {
     console.log(e.target.value);
     data?.tagBundleMany.map((item) => {
-      let newItem = [...item.name]
+      let newItem = [...item.name];
       return console.log(newItem);
     });
   };
