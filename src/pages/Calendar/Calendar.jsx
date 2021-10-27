@@ -1,9 +1,15 @@
-import React from "react";
+import { useQuery } from "@apollo/client";
+import React, { useContext } from "react";
 
-import useAllEntries from "../../queries/useAllEntries";
+import UserInfoContext from "../../context/UserInfoContext";
+import { LOGIN } from "../../queries/UserQuery";
 
+//TODO: add helmet for all pages
 export const Calendar = () => {
-  const ee = useAllEntries();
-  console.log(ee);
+  const { data } = useQuery(LOGIN);
+  const { getUserInfo } = useContext(UserInfoContext);
+
+  console.log(data, getUserInfo);
+
   return <>CALENDAR</>;
 };

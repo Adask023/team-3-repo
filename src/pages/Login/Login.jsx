@@ -9,24 +9,20 @@ import {
 import { Box } from "@mui/system";
 import { Formik } from "formik";
 import React, { useCallback, useContext } from "react";
-import { useHistory } from "react-router";
 import * as Yup from "yup";
 
-import { ROUTES } from "../../constans/routes";
 import UserInfoContext from "../../context/UserInfoContext";
 
 export const Login = () => {
   const { setUserInfo } = useContext(UserInfoContext);
-  const { push } = useHistory();
 
-  const login = useCallback(
+  const logIn = useCallback(
     ({ login }) => {
       setUserInfo({
-        login,
+        oauthId: login,
       });
-      push(ROUTES.CALENDAR);
     },
-    [push, setUserInfo]
+    [setUserInfo]
   );
 
   return (
@@ -41,7 +37,7 @@ export const Login = () => {
     >
       <Formik
         initialValues={{ login: "" }}
-        onSubmit={login}
+        onSubmit={logIn}
         validationSchema={Yup.object().shape({
           login: Yup.string().trim().required("Required"),
         })}
