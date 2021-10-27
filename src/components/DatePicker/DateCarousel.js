@@ -2,7 +2,7 @@ import { Button } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useMemo } from "react";
 import { useEffect, useState } from "react";
-import { getDateSkipTime, isDateEqualYMD } from "../../utils/dateUtils";
+import { isDateEqualYMD } from "../../utils/dateUtils";
 
 import { MaterialDatePicker } from "./MaterialDatePicker";
 
@@ -41,6 +41,7 @@ export const DateCarousel = ({ onDateChange, dateValue }) => {
         p: 1,
         m: 1,
         display: "flex",
+        width: "fit-content",
       }}
     >
       <Button onClick={(e) => handleDayChange(e, -1)}>Prev</Button>
