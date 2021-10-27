@@ -10,8 +10,9 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
+import React from "react";
 
-export const SingleEntry = ({
+const SingleEntry = ({
   id,
   startTime,
   endTime,
@@ -39,9 +40,9 @@ export const SingleEntry = ({
           value={tagBundle}
           onChange={console.log}
         >
-          {tagBundleOptions?.map((option, index) => (
-            <MenuItem value={option} key={index}>
-              {option}
+          {tagBundleOptions?.map(({ description, _id }) => (
+            <MenuItem value={description} key={_id}>
+              {description}
             </MenuItem>
           ))}
         </Select>
@@ -63,3 +64,5 @@ export const SingleEntry = ({
     </Stack>
   );
 };
+
+export const MemoizedSingleEntry = React.memo(SingleEntry);
