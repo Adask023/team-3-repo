@@ -1,24 +1,28 @@
+/*eslint-disable*/
 import { gql, useMutation, useQuery } from "@apollo/client";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Input from "@mui/material/Input";
 import Stack from "@mui/material/Stack";
 import Switch from "@mui/material/Switch";
-import React, { useEffect } from "react";
+import React, { useContext } from "react";
+import UserInfoContext from "../../context/UserInfoContext";
 
-const Settings = () => {
+export const Settings = () => {
   const GET_ALL_ENTRIES = gql`
     query GetAllEntries {
       tagBundleMany {
         _id
         name
         description
+        creatorId
       }
     }
   `;
   const SHOW_USER_BUNDLES = gql`
     query ShowProfile {
       getProfile {
+        oauthId
         tagBundles {
           _id
           name
@@ -49,11 +53,9 @@ const Settings = () => {
   const { data: dataUser } = useQuery(SHOW_USER_BUNDLES);
   const [assignBundleId] = useMutation(ADD_USERS_BUNDLE);
   const [deleteBundleId] = useMutation(DELETE_USER_BUNDLE);
+  const { userInfo } = useContext(UserInfoContext);
   // if (error) return <div className="">Error: </div>;
   // if (loading) return <div className="">Loading...</div>;
-  useEffect(() => {
-    console.log("hi");
-  }, []);
   const handleChange = (e, item) => {
     if (e.target.checked) {
       assignBundleId({
@@ -72,15 +74,21 @@ const Settings = () => {
   };
   const handleFilter = (e) => {
     console.log(e.target.value);
+    data?.tagBundleMany.map((item) => {
+      let newItem = [...item.name]
+      return console.log(newItem);
+    });
   };
   // aktywny filtr wyszukiwania?
   // podzielić je na jakieś grupy?
   // Alfabetycznie pogrupować?
-  // console.log(data?.tagBundleMany);
-  console.log(dataUser?.getProfile.tagBundles);
+  console.log(data?.tagBundleMany);
+  console.log(dataUser?.getProfile.oauthId);
   return (
     <Container>
+      <h2>{userInfo?.oauthId}</h2>
       <Input style={{ marginTop: "5rem" }} onChange={handleFilter} />
+      <h5>Find bundle</h5>
       <Grid container style={{ margin: "3rem 0" }}>
         {dataUser
           ? data?.tagBundleMany.map((item) => {
@@ -103,15 +111,6 @@ const Settings = () => {
                     onChange={(e) => ((item) => handleChange(e, item))(item)}
                     id={item._id}
                   />
-                  {/* <div style={switcher}>
-                  <input
-                    type="checkbox"
-                    name="toggleCheckbox"
-                    defaultChecked={checked !== undefined ? true : false}
-                    id={item._id}
-                    onChange={(e) => ((item) => handleChange(e, item))(item)}
-                  />
-                </div> */}
                   <Stack>
                     <h3 style={{ margin: "0.3rem" }}>{item.name}</h3>
                     <p
@@ -131,5 +130,3 @@ const Settings = () => {
     </Container>
   );
 };
-
-export default Settings;

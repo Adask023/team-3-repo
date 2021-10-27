@@ -6,7 +6,7 @@ import { AuthorizedLayout } from "../layouts/AuthorizedLayout/AuthorizedLayout";
 import { Bundle } from "../pages/Bundle/Bundle";
 import { Calendar } from "../pages/Calendar/Calendar";
 import { PageNotFound } from "../pages/PageNotFound/PageNotFound";
-import Settings from "../pages/Settings/Settings";
+import { Settings } from "../pages/Settings/Settings";
 
 export const AuthorizedApp = () => {
   return (
