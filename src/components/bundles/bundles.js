@@ -1,4 +1,5 @@
 import { gql } from "@apollo/client";
+import { Container, List, ListItemButton, ListItemText } from "@mui/material";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -26,7 +27,7 @@ const Bundles = () => {
 
   // example data structure singleBundle._id
   return (
-    <div>
+    <Container>
       <div>
         {!isPopUpActive && (
           <button onClick={() => setPopUpActive(true)}>ADD NEW BUNDLE</button>
@@ -35,16 +36,18 @@ const Bundles = () => {
         {isPopUpActive && <AddBundlePopUp setPopUpActive={setPopUpActive} />}
       </div>
       <h1>Bundles list:</h1>
-      {data.tagBundleMany.map(({ _id, name }) => {
-        return (
-          <div key={_id}>
-            <Link to={`/bundle/${_id}`}>
-              <h3>{name}</h3>
-            </Link>
-          </div>
-        );
-      })}
-    </div>
+      <List>
+        {data.tagBundleMany.map(({ _id, name }) => {
+          return (
+            <ListItemButton key={_id}>
+              <Link to={`/bundle/${_id}`}>
+                <ListItemText>{name}</ListItemText>
+              </Link>
+            </ListItemButton>
+          );
+        })}
+      </List>
+    </Container>
   );
 };
 
