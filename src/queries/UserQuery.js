@@ -7,10 +7,9 @@ export const LOGIN = gql`
       oauthId
       tagBundlesIds
       tagBundles {
+        _id
         description
         creatorId
-        updatedAt
-        createdAt
       }
     }
   }

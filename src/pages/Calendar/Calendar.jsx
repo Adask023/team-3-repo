@@ -1,15 +1,25 @@
-import { useQuery } from "@apollo/client";
-import React, { useContext } from "react";
+import React, { useState } from "react";
 
-import UserInfoContext from "../../context/UserInfoContext";
-import { LOGIN } from "../../queries/UserQuery";
+import { DateCarousel } from "../../components/DatePicker/DateCarousel";
+import { Entries } from "../../components/Entries/Entries";
+import { formatDate } from "../../utils/dateUtils";
 
-//TODO: add helmet for all pages
+const now = new Date();
+
 export const Calendar = () => {
-  const { data } = useQuery(LOGIN);
-  const { getUserInfo } = useContext(UserInfoContext);
+  const [date, setDate] = useState(now);
+  const handleDateChange = (date) => {
+    setDate(date);
+  };
 
-  console.log(data, getUserInfo);
+  return (
+    <>
+      <DateCarousel
+        onDateChange={(newDate) => handleDateChange(newDate)}
+        dateValue={date}
+      />
 
-  return <>CALENDAR</>;
+      <Entries date={formatDate(date)} />
+    </>
+  );
 };
