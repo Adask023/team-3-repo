@@ -1,5 +1,6 @@
 /* eslint-disable */
 import { gql, useMutation } from "@apollo/client";
+import { TextField } from "@mui/material";
 import React, { useState } from "react";
 
 const UPDATE_DESCRIPTION = gql`
@@ -24,7 +25,6 @@ function Description({ _id, creatorId, description }) {
   const initDesc = description;
 
   const handleDescriptionChange = () => {
-    console.log("updated");
     updateDescription({
       variables: {
         id: _id,
@@ -34,7 +34,7 @@ function Description({ _id, creatorId, description }) {
     });
   };
 
-  console.log(descriptionToChange);
+  // console.log(descriptionToChange);
 
   return (
     <div>
@@ -59,6 +59,14 @@ function Description({ _id, creatorId, description }) {
       )}
     </div>
   );
+}
+{
+  /* <TextField
+  placeholder="MultiLine with rows: 2 and rowsMax: 4"
+  multiline
+  rows={2}
+  rowsMax={4}
+/>; */
 }
 
 export default Description;
