@@ -1,11 +1,9 @@
 import { gql, useQuery } from "@apollo/client";
 import { Container, Grid } from "@mui/material";
-import React, { useContext } from "react";
+import React from "react";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 
-// import UserInfoContext from "../../../context/UserInfoContext";
-import UserInfoContext from "../../../context/UserInfoContext";
 import BundleTagsPagination from "./BundleTagsPagination";
 import Description from "./Description";
 
@@ -26,13 +24,9 @@ const GET_BUNDLE_BY_ID = gql`
 function BundleItem() {
   let { _id } = useParams();
 
-  const { userInfo } = useContext(UserInfoContext);
-
-  // console.log(_id);
   const { data, loading, error } = useQuery(GET_BUNDLE_BY_ID, {
     variables: { bundleSetId: _id },
   });
-  console.log(userInfo);
 
   if (loading) return <div>loading...</div>;
   if (error) return <div>error</div>;
