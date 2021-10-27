@@ -11,3 +11,15 @@ export const currentTime = () => {
     2
   )}`;
 };
+
+export const isDateEqualYMD = (date1, date2) => {
+  return (
+    date1.getDate() === date2.getDate() &&
+    date1.getMonth() === date2.getMonth() &&
+    date1.getYear() === date2.getYear()
+  );
+};
+
+export const getDateSkipTime = (date) => {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+};

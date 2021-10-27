@@ -7,7 +7,7 @@ import useUpdateEntry from "../../mutations/useUpdateEntry";
 import useCreateNewEntry from "../../mutations/useCreateNewEntry";
 import useAllEntriesFilterByDate from "../../queries/useAllEntriesFilterByDate";
 import { currentTime, zeroPad } from "../../utils/dateUtils";
-import { MemoizedSingleEntry } from "./MemoizedSingleEntry";
+import { MemoizedSingleEntry } from "./SingleEntry";
 import { UserInfoContext } from "../../context/UserInfoContext";
 
 export const Entries = ({ date }) => {
@@ -16,6 +16,7 @@ export const Entries = ({ date }) => {
   const [updateEntry] = useUpdateEntry();
   const [entries, setEntries] = useState(data);
   const { userInfo } = useContext(UserInfoContext);
+  console.log(userInfo);
 
   const orderNoArray = useMemo(() => {
     if (!entries) return [0];
