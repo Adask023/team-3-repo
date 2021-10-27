@@ -7,7 +7,7 @@ import useUpdateEntry from "../../mutations/useUpdateEntry";
 import useCreateNewEntry from "../../mutations/useCreateNewEntry";
 import useAllEntriesFilterByDate from "../../queries/useAllEntriesFilterByDate";
 import { currentTime, zeroPad } from "../../utils/dateUtils";
-import { MemoizedSingleEntry } from "./MemoizedSingleEntry";
+import { MemoizedSingleEntry } from "./SingleEntry";
 import { UserInfoContext } from "../../context/UserInfoContext";
 
 export const Entries = ({ date }) => {
@@ -103,7 +103,7 @@ export const Entries = ({ date }) => {
             startTime={e.startTime}
             endTime={e.endTime}
             tagBundle={"bundle"}
-            tagBundleOptions={userInfo.tagBundles}
+            tagBundleOptions={["userInfo.tagBundles"]}
             tag={"tag"}
             tagOptions={["tag", "b", "c"]}
             order={e.order}
