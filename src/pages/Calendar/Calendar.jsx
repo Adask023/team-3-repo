@@ -1,9 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 
-import useAllEntries from "../../queries/useAllEntries";
+import { DateCarousel } from "../../components/DatePicker/DateCarousel";
+import { Entries } from "../../components/Entries/Entries";
+import { formatDate } from "../../utils/dateUtils";
+
+const now = new Date();
 
 export const Calendar = () => {
-  const ee = useAllEntries();
-  console.log(ee);
-  return <>CALENDAR</>;
+  const [date, setDate] = useState(now);
+  const handleDateChange = (date) => {
+    setDate(date);
+  };
+  return (
+    <>
+      <DateCarousel
+        onDateChange={(newDate) => handleDateChange(newDate)}
+        dateValue={date}
+      />
+
+      <Entries date={formatDate(date)} />
+    </>
+  );
 };

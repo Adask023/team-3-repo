@@ -13,6 +13,7 @@
         "endOfLine": "auto"
       }
     ],
+    "no-unused-vars": "warn",
     "react/display-name": "off",
     "react/no-children-prop": "off",
     "react/react-in-jsx-scope": "warn",
