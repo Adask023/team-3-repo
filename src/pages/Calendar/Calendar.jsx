@@ -11,7 +11,6 @@ export const Calendar = () => {
   const handleDateChange = (date) => {
     setDate(date);
   };
-
   return (
     <>
       <DateCarousel

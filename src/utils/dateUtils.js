@@ -3,3 +3,11 @@ export const formatDate = (date) => {
 };
 
 export const zeroPad = (num, places) => String(num).padStart(places, "0");
+
+export const currentTime = () => {
+  const dateNow = new Date();
+  return `${zeroPad(dateNow.getHours(), 2)}:${zeroPad(
+    dateNow.getMinutes(),
+    2
+  )}`;
+};
