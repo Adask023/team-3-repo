@@ -1,50 +1,85 @@
-
 import { Button, CircularProgress, Stack } from "@mui/material";
 import { Box } from "@mui/system";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import useUpdateEntry from "../../mutations/useUpdateEntry";
 import useCreateNewEntry from "../../mutations/useCreateNewEntry";
 import useAllEntriesFilterByDate from "../../queries/useAllEntriesFilterByDate";
-import { zeroPad } from "../../utils/dateUtils";
-// import { matchSorter } from "match-sorter";
+import { currentTime, zeroPad } from "../../utils/dateUtils";
 import { SingleEntry } from "./SingleEntry";
 
 export const Entries = ({ date }) => {
   const { data, loading } = useAllEntriesFilterByDate(date);
   const [addEntry] = useCreateNewEntry();
+  const [updateEntry] = useUpdateEntry();
   const [entries, setEntries] = useState(data);
 
+  const orderNoArray = useMemo(() => {
+    if (!entries) return [0];
+    if (entries.length === 0) return [0];
+    return entries.map((e) => e.order);
+  }, [entries]);
+
+  const minOrderNo = orderNoArray[0];
+  const maxOrderNo = orderNoArray[orderNoArray.length - 1];
+
   useEffect(() => {
-    console.log(data);
-    setEntries(data);
-    // console.log(matchSorter(data, { keys: ["order"] }));
+    if (data) {
+      const sorted = [...data].sort((e1, e2) => e1.order - e2.order);
+      setEntries(sorted);
+    }
   }, [data]);
 
-  const addNewEntry = () => {
-    const dateNow = new Date();
-    const time = `${zeroPad(dateNow.getHours(), 2)}:${zeroPad(
-      dateNow.getMinutes(),
-      2
-    )}`;
+  const addNewEntry = (e, order, startTime) => {
+    let orderNo = 0;
+    if (order === undefined) {
+      entries.length > 0 ? (orderNo = minOrderNo - 1) : (orderNo = 0);
+    } else if (maxOrderNo > order) {
+      orderNo = order + 1;
+      let entriesToUpdate = entriesAfterOrderNo(orderNo);
+      entriesToUpdate = incrementEntryOrders(entriesToUpdate);
+      entriesToUpdate.forEach((entry) => {
+        let { entryId, ...rest } = entry;
+        updateEntry({
+          variables: { entryId: entryId, record: rest },
+        });
+      });
+    } else {
+      orderNo = maxOrderNo + 1;
+    }
+    let time = startTime;
+    if (!startTime) time = currentTime();
     addEntry({
       variables: {
-        record: { startTime: time, date: date, order: getNextOrderNo() },
+        record: { startTime: time, date: date, order: orderNo },
       },
     });
   };
 
-  const getNextOrderNo = () => {
-    if (entries.length == 0) return 0;
-    const maxOrderNo = entries.map((e) => e.order);
-    return maxOrderNo[maxOrderNo.length - 1] + 1;
+  const entriesAfterOrderNo = (order) => {
+    return entries.filter((e) => e.order >= order);
+  };
+
+  const incrementEntryOrders = (entryArr) => {
+    return entryArr.map((entry) => {
+      return {
+        entryId: entry._id,
+        tagName: entry.tagName,
+        tagBundleName: entry.tagBundleName,
+        date: entry.date,
+        startTime: entry.startTime,
+        endTime: entry.endTime,
+        order: entry.order + 1,
+      };
+    });
   };
 
   return (
-    <Box sx={{ pt: 5, display: "flex" }}>
+    <Box sx={{ pt: 5, display: "flex", flexDirection: "column" }}>
       {loading ? <CircularProgress /> : null}
-      {entries?.length === 0 ? (
-        <Button onClick={addNewEntry}>Add new entry</Button>
-      ) : null}
-      <Stack spacing={4}>
+
+      <Button onClick={addNewEntry}>Add new entry</Button>
+
+      <Stack sx={{ pt: 5 }} spacing={4}>
         {entries?.map((e) => (
           <SingleEntry
             key={e._id}

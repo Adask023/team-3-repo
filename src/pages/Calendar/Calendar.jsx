@@ -11,11 +11,6 @@ export const Calendar = () => {
   const handleDateChange = (date) => {
     setDate(date);
   };
-
-  useEffect(() => {
-    console.log(`Calendar loaded for date: ${date.toLocaleString()}`);
-  }, [date]);
-
   return (
     <>
       <DateCarousel
