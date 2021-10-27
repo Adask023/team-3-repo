@@ -1,4 +1,4 @@
-/* eslint-disable */ 
+/* eslint-disable */
 import { gql, useMutation } from "@apollo/client";
 import React, { useState } from "react";
 
@@ -15,23 +15,26 @@ const UPDATE_DESCRIPTION = gql`
 
 function Description({ _id, creatorId, description }) {
   const [descriptionToChange, setDescriptionToChange] = useState(description);
-  // { description: "To jest nowe descrtion" }
 
   const [updateDescription] = useMutation(UPDATE_DESCRIPTION, {
-    variables: { description: "To jest nowe description" },
+    variables: { record: { description: "To jest nowe description" } },
   });
-  
+
   const userId = "61671921b7efc009eaf79450";
+  const initDesc = description;
 
   const handleDescriptionChange = () => {
-    console.log('updated')
+    console.log("updated");
     updateDescription({
       variables: {
         id: _id,
-        record: {description: descriptionToChange},
+        record: { description: descriptionToChange },
       },
+      refetchQueries: ["getBundle"],
     });
   };
+
+  console.log(descriptionToChange);
 
   return (
     <div>
@@ -39,12 +42,21 @@ function Description({ _id, creatorId, description }) {
       <p>UserId: {userId}</p>
       <p>CreatorId: {creatorId}</p>
       <p>description: {description}</p>
-      <textarea
-        value={descriptionToChange}
-        onChange={(e) => setDescriptionToChange(e.target.value)}
-      />
 
-      <button onClick={handleDescriptionChange}>Update</button>
+      {userId == creatorId ? (
+        <div>
+          <textarea
+            value={descriptionToChange}
+            onChange={(e) => setDescriptionToChange(e.target.value)}
+          />
+
+          {descriptionToChange !== initDesc ? (
+            <button onClick={handleDescriptionChange}>Update</button>
+          ) : null}
+        </div>
+      ) : (
+        <div>{description}</div>
+      )}
     </div>
   );
 }

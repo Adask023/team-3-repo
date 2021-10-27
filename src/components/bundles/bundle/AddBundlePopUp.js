@@ -22,6 +22,7 @@ function AddBundlePopUp({ setPopUpActive }) {
         variables: {
           record: { name: inputText, description: inputDescription },
         },
+        refetchQueries: ["GetAllBundles"],
       });
 
       setInputText("");

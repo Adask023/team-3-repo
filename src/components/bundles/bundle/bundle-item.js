@@ -38,15 +38,6 @@ function BundleItem() {
 
   const { description, creatorId } = data.tagBundleById;
 
-  // const tagsToDisplay = tags.map(({ name, _id }) => {
-  //   return (
-  //     <li key={_id}>
-  //       {name} id: {_id}
-  //     </li>
-  //   );
-  // });
-  // console.log(data.tagBundleById.tags[0].name);
-
   return (
     <div>
       <Link to="/bundle">
