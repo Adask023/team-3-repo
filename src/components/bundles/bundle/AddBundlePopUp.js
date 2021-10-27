@@ -23,10 +23,14 @@ function AddBundlePopUp({ setPopUpActive }) {
           record: { name: inputText, description: inputDescription },
         },
         refetchQueries: ["GetAllBundles"],
-      });
-
-      setInputText("");
-      setInputDescription("");
+      })
+        .then(() => {
+          setInputText("");
+          setInputDescription("");
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     } else {
       alert("fill both inputs before submitting");
     }

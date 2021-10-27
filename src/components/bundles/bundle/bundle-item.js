@@ -53,14 +53,15 @@ function BundleItem() {
           Creator id: {creatorId}
           <br />
           <h2>Description</h2>
-          <div>{description}</div>
+          <div>
+            <Description
+              _id={_id}
+              creatorId={creatorId}
+              description={description}
+            />
+          </div>
         </Grid>
         <Grid item xs={8} alignItems="center" justifyContent="center">
-          <Description
-            _id={_id}
-            creatorId={creatorId}
-            description={description}
-          />
           <br />
           <BundleTagsPagination _id={_id} />
         </Grid>

@@ -17,9 +17,7 @@ const UPDATE_DESCRIPTION = gql`
 function Description({ _id, creatorId, description }) {
   const [descriptionToChange, setDescriptionToChange] = useState(description);
 
-  const [updateDescription] = useMutation(UPDATE_DESCRIPTION, {
-    variables: { record: { description: "To jest nowe description" } },
-  });
+  const [updateDescription] = useMutation(UPDATE_DESCRIPTION);
 
   const userId = "61671921b7efc009eaf79450";
   const initDesc = description;
@@ -45,7 +43,10 @@ function Description({ _id, creatorId, description }) {
 
       {userId == creatorId ? (
         <div>
-          <textarea
+          <TextField
+            multiline
+            rows={4}
+            rowsMax={6}
             value={descriptionToChange}
             onChange={(e) => setDescriptionToChange(e.target.value)}
           />
