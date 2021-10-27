@@ -1,6 +1,7 @@
 import React from "react";
 import { Route, Switch } from "react-router";
 
+import BundleItem from "../components/bundles/bundle/bundle-item";
 import { ROUTES } from "../constans/routes";
 import { AuthorizedLayout } from "../layouts/AuthorizedLayout/AuthorizedLayout";
 import { Bundle } from "../pages/Bundle/Bundle";
@@ -14,7 +15,8 @@ export const AuthorizedApp = () => {
       <Switch>
         <Route exact path={ROUTES.START} />
         <Route path={ROUTES.CALENDAR} component={Calendar} />
-        <Route path={ROUTES.BUNDLE} component={Bundle} />
+        <Route exact path={ROUTES.BUNDLE} component={Bundle} />
+        <Route path={ROUTES.BUNDLE_ITEM} component={BundleItem} />
         <Route path={ROUTES.SETTINGS} component={Settings} />
         <Route exact path={ROUTES.NOT_FOUND} component={PageNotFound} />
       </Switch>
