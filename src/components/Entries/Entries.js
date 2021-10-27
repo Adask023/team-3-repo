@@ -16,7 +16,6 @@ export const Entries = ({ date }) => {
   const [updateEntry] = useUpdateEntry();
   const [entries, setEntries] = useState(data);
   const { userInfo } = useContext(UserInfoContext);
-  console.log(userInfo);
 
   const orderNoArray = useMemo(() => {
     if (!entries) return [0];
@@ -104,7 +103,7 @@ export const Entries = ({ date }) => {
             startTime={e.startTime}
             endTime={e.endTime}
             tagBundle={"bundle"}
-            tagBundleOptions={userInfo.tagBundles}
+            tagBundleOptions={["userInfo.tagBundles"]}
             tag={"tag"}
             tagOptions={["tag", "b", "c"]}
             order={e.order}
