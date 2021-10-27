@@ -2,12 +2,13 @@
 //FIXME:: imports
 import { Button, CircularProgress, Stack } from "@mui/material";
 import { Box } from "@mui/system";
-import { useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import useUpdateEntry from "../../mutations/useUpdateEntry";
 import useCreateNewEntry from "../../mutations/useCreateNewEntry";
 import useAllEntriesFilterByDate from "../../queries/useAllEntriesFilterByDate";
 import { currentTime, zeroPad } from "../../utils/dateUtils";
-import { SingleEntry } from "./SingleEntry";
+import { MemoizedSingleEntry } from "./MemoizedSingleEntry";
+import { UserInfoContext } from "../../context/UserInfoContext";
 
 export const Entries = ({ date }) => {
   const { data, loading } = useAllEntriesFilterByDate(date);
