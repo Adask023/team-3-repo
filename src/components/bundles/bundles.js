@@ -1,7 +1,8 @@
 import { gql } from "@apollo/client";
-import { Container, Grid } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import { Button, Container, Grid, IconButton, Typography } from "@mui/material";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 
 import useAllBundles from "../../queries/useAllBundles";
 import AddBundlePopUp from "./bundle/AddBundlePopUp";
@@ -30,13 +31,27 @@ const Bundles = () => {
     <Container>
       <div>
         {!isPopUpActive && (
-          <button onClick={() => setPopUpActive(true)}>ADD NEW BUNDLE</button>
+          <Button
+            variant="contained"
+            color="primary"
+            endIcon={<AddIcon />}
+            onClick={() => setPopUpActive(true)}
+          >
+            Add Bundle
+          </Button>
         )}
 
         {isPopUpActive && <AddBundlePopUp setPopUpActive={setPopUpActive} />}
       </div>
-      <h1>Bundles list:</h1>
-      <Grid container style={{ margin: "3rem 0" }}>
+      <Typography
+        style={{ marginTop: "2rem" }}
+        variant="h4"
+        color="textPrimary"
+        align="center"
+      >
+        Bundles list
+      </Typography>
+      <Grid container spacing={1} style={{ margin: "3rem 0" }}>
         {data.tagBundleMany.map(({ _id, name }) => {
           return (
             <Grid
@@ -50,7 +65,14 @@ const Bundles = () => {
               justifyContent="center"
               style={{ marginBottom: "0.6rem" }}
             >
-              <Link to={`/bundle/${_id}`}>{name}</Link>
+              <Button
+                style={{ minWidth: "100%", minHeight: "100%" }}
+                size="big"
+                component={RouterLink}
+                to={`/bundle/${_id}`}
+              >
+                {name}
+              </Button>
             </Grid>
           );
         })}
