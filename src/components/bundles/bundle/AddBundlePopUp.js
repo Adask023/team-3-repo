@@ -9,6 +9,7 @@ import {
   InputLabel,
   TextField,
 } from "@mui/material";
+import { ErrorMessage, Field, Form, Formik } from "formik";
 import React, { useState } from "react";
 
 import { ADD_BUNDLE } from "../../../queries/Bundle-page/AddBundle";
@@ -47,9 +48,9 @@ function AddBundlePopUp({ setPopUpActive }) {
           setInputText("");
           setInputDescription("");
           alert("Bundle added");
+          setPopUpActive(false);
         })
         .catch((e) => {
-          console.log(e);
           alert(e);
         });
     } else {
@@ -60,6 +61,45 @@ function AddBundlePopUp({ setPopUpActive }) {
   return (
     <div style={styles.wrapper}>
       <Container align="center" sx={{ width: "60%" }}>
+        {/* <Formik
+          initialValues={{
+            bundleName: "",
+            description: "",
+          }}
+          onSubmit={(e) => handleSubmit(e)}
+        >
+          <Form>
+            <TextField
+              id="bundleName"
+              fullWidth
+              label="Bundle name"
+              type="text"
+              value={inputText}
+              onChange={(e) => setInputText(e.target.value)}
+              style={{ marginBottom: "1rem" }}
+            />
+            <TextField
+              id="description"
+              fullWidth
+              label="description"
+              type="text"
+              value={inputText}
+              onChange={(e) => setInputText(e.target.value)}
+              style={{ marginBottom: "1rem" }}
+            />
+            <Button
+              variant="contained"
+              color="primary"
+              endIcon={<AddIcon />}
+              sx={{ width: "60%" }}
+              style={{ marginBottom: "0.8rem" }}
+              type="submit"
+            >
+              Add
+            </Button>
+          </Form>
+        </Formik> */}
+        <div></div>
         <form
           style={{
             padding: "2rem",

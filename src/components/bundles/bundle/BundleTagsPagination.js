@@ -47,7 +47,7 @@ function BundleTagsPagination({ _id }) {
 
   const tagsToDisplay = items.map((item) => {
     return (
-      <TableRow hover key={item._id}>
+      <TableRow style={{ padding: "1rem" }} hover key={item._id}>
         {item.name}
       </TableRow>
     );
