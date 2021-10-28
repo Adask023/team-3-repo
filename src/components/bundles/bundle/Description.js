@@ -1,19 +1,21 @@
-/* eslint-disable */
+// /* eslint-disable */
 import { gql, useMutation } from "@apollo/client";
-import { TextField } from "@mui/material";
+import { Button, CardActions, TextField, Typography } from "@mui/material";
 import React, { useContext, useState } from "react";
-import UserInfoContext from "../../../context/UserInfoContext";
 
-const UPDATE_DESCRIPTION = gql`
-  mutation updateDescription(
-    $id: MongoID!
-    $record: UpdateByIdTagBundleInput!
-  ) {
-    tagBundleUpdateById(_id: $id, record: $record) {
-      recordId
-    }
-  }
-`;
+import UserInfoContext from "../../../context/UserInfoContext";
+import { UPDATE_DESCRIPTION } from "../../../mutations/Bundle-page/UpdateDescription";
+
+// const UPDATE_DESCRIPTION = gql`
+//   mutation updateDescription(
+//     $id: MongoID!
+//     $record: UpdateByIdTagBundleInput!
+//   ) {
+//     tagBundleUpdateById(_id: $id, record: $record) {
+//       recordId
+//     }
+//   }
+// `;
 
 function Description({ _id, creatorId, description }) {
   const [descriptionToChange, setDescriptionToChange] = useState(description);
@@ -22,7 +24,7 @@ function Description({ _id, creatorId, description }) {
   const [updateDescription] = useMutation(UPDATE_DESCRIPTION, {
     variables: { record: { description: "To jest nowe description" } },
   });
-  
+
   const userId = userInfo._id;
   const initDesc = description;
 
@@ -34,28 +36,45 @@ function Description({ _id, creatorId, description }) {
       },
       refetchQueries: ["getBundle"],
     });
+    alert("Description updated");
   };
 
   // console.log(descriptionToChange);
 
   return (
     <div>
-      <p>Bundle ID: {_id}</p>
-      <p>UserId: {userId}</p>
-      <p>CreatorId: {creatorId}</p>
-      <p>description: {description}</p>
+      {/* <p>Bundle ID: {_id}</p> */}
+      {/* <p>UserId: {userId}</p>
+      <p>CreatorId: {creatorId}</p> */}
+      {userId == creatorId ? (
+        <Typography variant="caption" color="green">
+          You are the owner of that bundle
+        </Typography>
+      ) : (
+        ""
+      )}
+      {/* <p>description: {description}</p> */}
 
       {userId == creatorId ? (
-        <div>
-          <textarea
+        <>
+          <TextField
+            multiline
+            fullWidth
+            rows={6}
+            rowsMax={10}
             value={descriptionToChange}
             onChange={(e) => setDescriptionToChange(e.target.value)}
           />
+          <br />
 
           {descriptionToChange !== initDesc ? (
-            <button onClick={handleDescriptionChange}>Update</button>
+            <CardActions>
+              <Button variant="contained" onClick={handleDescriptionChange}>
+                Update
+              </Button>
+            </CardActions>
           ) : null}
-        </div>
+        </>
       ) : (
         <div>{description}</div>
       )}
