@@ -34,7 +34,9 @@ export const Entries = ({ date }) => {
   }, [data]);
 
   const getTagBundleOptions = () => {
-    return userInfo.tagBundles.map((tb) => tb.name);
+    const tagBundles = userInfo.tagBundles;
+    if(!tagBundles) return [];
+    return tagBundles.map((tb) => tb.name);
   };
 
   const addNewEntry = (e, order, startTime) => {

@@ -17,6 +17,7 @@ import useUpdateEntry from "../../mutations/useUpdateEntry";
 import { currentTime } from "../../utils/dateUtils";
 import React from "react";
 import { Form, Formik } from "formik";
+import { singleEntrySchema } from "../../schemas/singleEntrySchema";
 
 const SingleEntry = ({ entryData, tagBundleOptions, newEntryHandler }) => {
   const initialValues = {
@@ -50,11 +51,12 @@ const SingleEntry = ({ entryData, tagBundleOptions, newEntryHandler }) => {
     updateEntry({
       variables: { entryId: entryData._id, record: entryValObj },
     });
-    newEntryHandler(entryData.order, newEntryStartTime);
+    newEntryHandler(null, entryData.order, newEntryStartTime);
   };
 
   return (
     <Formik
+      validationSchema={singleEntrySchema}
       onSubmit={handleSubmit}
       initialValues={initialValues}
       isInitialValid={false}
@@ -117,11 +119,12 @@ const SingleEntry = ({ entryData, tagBundleOptions, newEntryHandler }) => {
                 options={["tagOptions"]}
                 sx={{ width: 300 }}
                 name="tagName"
+                disabled={values.tagBundleName === ""}
                 value={values.tagName}
                 onInputChange={(e, v) => handleAutocompleteChange(e, v)}
                 renderInput={(params) => <TextField {...params} label="Tag" />}
               />
-              <Button type="submit">
+              <Button type="submit" disabled={false}>
                 <AddCircleIcon></AddCircleIcon>
               </Button>
               <Button onClick={deleteEntryHandler}>
