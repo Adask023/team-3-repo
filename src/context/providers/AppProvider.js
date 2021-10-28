@@ -13,16 +13,16 @@ export const AppProvider = () => {
 
   return (
     <ThemeProvider>
-      <ApolloClientProvider>
-        <UserInfoProvider>
-          <Router basename={BASENAME}>
+      <UserInfoProvider>
+        <Router basename={BASENAME}>
+          <ApolloClientProvider>
             <RedirectObserver>
               <AppRoutes />
               <AuthorizedApp />
             </RedirectObserver>
-          </Router>
-        </UserInfoProvider>
-      </ApolloClientProvider>
+          </ApolloClientProvider>
+        </Router>
+      </UserInfoProvider>
     </ThemeProvider>
   );
 };

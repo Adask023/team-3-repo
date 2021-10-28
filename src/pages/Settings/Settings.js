@@ -1,82 +1,55 @@
 /*eslint-disable*/
-import { gql, useMutation, useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
+import { CircularProgress } from "@mui/material";
+import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Input from "@mui/material/Input";
 import Stack from "@mui/material/Stack";
 import Switch from "@mui/material/Switch";
-import debounce from 'lodash.debounce'
-import React, { useContext, useState, useEffect } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import UserInfoContext from "../../context/UserInfoContext";
+import {
+  ADD_USERS_BUNDLE,
+  DELETE_USER_BUNDLE,
+  GET_ALL_ENTRIES,
+  SHOW_USER_BUNDLES
+} from "../../queries/SettingsQueries";
 
 export const Settings = () => {
-  const GET_ALL_ENTRIES = gql`
-    query GetAllEntries {
-      tagBundleMany {
-        _id
-        name
-        description
-        creatorId
-      }
-    }
-  `;
-  const SHOW_USER_BUNDLES = gql`
-    query ShowProfile {
-      getProfile {
-        oauthId
-        tagBundles {
-          _id
-          name
-          description
-        }
-      }
-    }
-  `;
-  const ADD_USERS_BUNDLE = gql`
-    mutation assignFilteredBundle($bundleId: ID) {
-      assignBundleId(bundleId: $bundleId) {
-        tagBundles {
-          name
-        }
-      }
-    }
-  `;
-  const DELETE_USER_BUNDLE = gql`
-    mutation UnassignFilteredBundle($bundleId: ID) {
-      unassignBundleId(bundleId: $bundleId) {
-        tagBundles {
-          name
-        }
-      }
-    }
-  `;
-  const { data } = useQuery(GET_ALL_ENTRIES);
+  const { data, loading } = useQuery(GET_ALL_ENTRIES);
   const { data: dataUser } = useQuery(SHOW_USER_BUNDLES);
   const [assignBundleId] = useMutation(ADD_USERS_BUNDLE);
   const [deleteBundleId] = useMutation(DELETE_USER_BUNDLE);
-  const { userInfo } = useContext(UserInfoContext);
+  const { userInfo, setUserInfo } = useContext(UserInfoContext);
   const [ render, setRender ] = useState( )
   // if (error) return <div className="">Error: </div>;
   // if (loading) return <div className="">Loading...</div>;
   useEffect( () => {
     setRender(data?.tagBundleMany)
   },[data] )
-  const handleChange = (e, item) => {
-    if (e.target.checked) {
-      assignBundleId({
-        variables: {
-          bundleId: item._id,
-        },
-      });
-    }
-    if (!e.target.checked) {
-      deleteBundleId({
-        variables: {
-          bundleId: item._id,
-        },
-      });
-    }
-  };
+  const handleChange = useCallback(
+    (e, item) => {
+      if (e.target.checked) {
+        assignBundleId({
+          variables: {
+            bundleId: item._id,
+          },
+        });
+        setUserInfo({...userInfo});
+        //tutaj jest błąd, muszę zwrócić obiekt a potem dopiero zrwócić tablicę z nową wartością 
+      }
+      if (!e.target.checked) {
+        deleteBundleId({
+          variables: {
+            bundleId: item._id,
+          },
+        });
+        setUserInfo(userInfo.filter((itemNew) => itemNew !== item))
+      }
+    },
+    [assignBundleId, deleteBundleId]
+  );
   const handleFilter = (e) => {
     const filteredData = data?.tagBundleMany.map((item) => {
       let name = item.name.toLowerCase();
@@ -88,10 +61,21 @@ export const Settings = () => {
     setRender(filteredData)
     return console.log(filteredData)
   };
-  // podzielić je na jakieś grupy?
-  // Alfabetycznie pogrupować?
+  if (loading)
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <CircularProgress />
+    </Box>
+  );
   // console.log(data?.tagBundleMany);
   // console.log(dataUser?.getProfile.oauthId);
+  console.log(userInfo)
   return (
     <Container>
       <h2>Witaj, {userInfo?.oauthId} !</h2>
@@ -100,7 +84,7 @@ export const Settings = () => {
       <Grid container style={{ margin: "3rem 0" }}>
         {dataUser
           ? render?.map((item) => {
-              let checked = dataUser?.getProfile.tagBundles.find(
+              let checked = userInfo.find(
                 (bundle) => bundle._id === item._id
               );
               return (
