@@ -33,12 +33,6 @@ export const Entries = ({ date }) => {
     }
   }, [data]);
 
-  const getTagBundleOptions = () => {
-    const tagBundles = userInfo.tagBundles;
-    if(!tagBundles) return [];
-    return tagBundles.map((tb) => tb.name);
-  };
-
   const addNewEntry = (e, order, startTime) => {
     let orderNo = 0;
     if (order === undefined) {
@@ -72,12 +66,7 @@ export const Entries = ({ date }) => {
   const incrementEntryOrders = (entryArr) => {
     return entryArr.map((entry) => {
       return {
-        entryId: entry._id,
-        tagName: entry.tagName,
-        tagBundleName: entry.tagBundleName,
-        date: entry.date,
-        startTime: entry.startTime,
-        endTime: entry.endTime,
+        ...entry,
         order: entry.order + 1,
       };
     });
@@ -106,7 +95,7 @@ export const Entries = ({ date }) => {
           <MemoizedSingleEntry
             key={entry._id}
             entryData={entry}
-            tagBundleOptions={getTagBundleOptions()}
+            tagBundles={userInfo?.tagBundles}
             newEntryHandler={addNewEntry}
           />
         ))}
