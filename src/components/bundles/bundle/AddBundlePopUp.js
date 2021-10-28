@@ -19,6 +19,21 @@ const ADD_BUNDLE = gql`
   }
 `;
 
+const styles = {
+  wrapper: {
+    zIndex: "999",
+    left: "0",
+    top: "0",
+    width: "100%",
+    height: "100%",
+    position: "fixed",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    backdropFilter: "blur(3px)",
+  },
+};
+
 function AddBundlePopUp({ setPopUpActive }) {
   const [createClient] = useMutation(ADD_BUNDLE);
   const [inputText, setInputText] = useState("");
@@ -37,9 +52,11 @@ function AddBundlePopUp({ setPopUpActive }) {
         .then(() => {
           setInputText("");
           setInputDescription("");
+          alert("Bundle added");
         })
         .catch((e) => {
           console.log(e);
+          alert(e);
         });
     } else {
       alert("fill both inputs before submitting");
@@ -47,9 +64,16 @@ function AddBundlePopUp({ setPopUpActive }) {
   };
 
   return (
-    <div>
+    <div style={styles.wrapper}>
       <Container align="center" sx={{ width: "60%" }}>
-        <form onSubmit={(e) => handleSubmit(e)}>
+        <form
+          style={{
+            padding: "2rem",
+            backgroundColor: "white",
+            border: "2px solid rgba(0, 0, 0, 0.05)",
+          }}
+          onSubmit={(e) => handleSubmit(e)}
+        >
           <TextField
             fullWidth
             label="Bundle name"
@@ -75,21 +99,20 @@ function AddBundlePopUp({ setPopUpActive }) {
             color="primary"
             endIcon={<AddIcon />}
             sx={{ width: "60%" }}
-            style={{ marginBottom: "0.5rem" }}
+            style={{ marginBottom: "0.8rem" }}
             type="submit"
           >
             Add
           </Button>
-          <br />
+          <Button
+            sx={{ width: "60%" }}
+            variant="outlined"
+            color="error"
+            onClick={() => setPopUpActive(false)}
+          >
+            Close
+          </Button>
         </form>
-        <Button
-          sx={{ width: "60%" }}
-          variant="outlined"
-          color="error"
-          onClick={() => setPopUpActive(false)}
-        >
-          Close
-        </Button>
       </Container>
     </div>
   );

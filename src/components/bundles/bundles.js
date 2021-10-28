@@ -17,6 +17,14 @@ const GET_ALL_BUNDLES = gql`
   }
 `;
 
+const styles = {
+  addBtn: {
+    position: "fixed",
+    bottom: "2rem",
+    right: "2rem",
+  },
+};
+
 const Bundles = () => {
   const { data, loading, error } = useAllBundles(GET_ALL_BUNDLES);
   const [isPopUpActive, setPopUpActive] = useState(false);
@@ -32,6 +40,7 @@ const Bundles = () => {
       <div>
         {!isPopUpActive && (
           <Button
+            style={styles.addBtn}
             variant="contained"
             color="primary"
             endIcon={<AddIcon />}

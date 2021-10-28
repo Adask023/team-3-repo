@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { gql, useMutation } from "@apollo/client";
-import { TextField } from "@mui/material";
+import { Button, CardActions, TextField } from "@mui/material";
 import React, { useContext, useState } from "react";
 import UserInfoContext from "../../../context/UserInfoContext";
 
@@ -22,7 +22,7 @@ function Description({ _id, creatorId, description }) {
   const [updateDescription] = useMutation(UPDATE_DESCRIPTION, {
     variables: { record: { description: "To jest nowe description" } },
   });
-  
+
   const userId = userInfo._id;
   const initDesc = description;
 
@@ -34,31 +34,38 @@ function Description({ _id, creatorId, description }) {
       },
       refetchQueries: ["getBundle"],
     });
+    alert("Description updated");
   };
 
   // console.log(descriptionToChange);
 
   return (
     <div>
-      <p>Bundle ID: {_id}</p>
+      {/* <p>Bundle ID: {_id}</p>
       <p>UserId: {userId}</p>
       <p>CreatorId: {creatorId}</p>
-      <p>description: {description}</p>
+      <p>description: {description}</p> */}
 
       {userId == creatorId ? (
-        <div>
+        <>
           <TextField
             multiline
-            rows={4}
-            rowsMax={6}
+            fullWidth
+            rows={6}
+            rowsMax={10}
             value={descriptionToChange}
             onChange={(e) => setDescriptionToChange(e.target.value)}
           />
+          <br />
 
           {descriptionToChange !== initDesc ? (
-            <button onClick={handleDescriptionChange}>Update</button>
+            <CardActions>
+              <Button variant="contained" onClick={handleDescriptionChange}>
+                Update
+              </Button>
+            </CardActions>
           ) : null}
-        </div>
+        </>
       ) : (
         <div>{description}</div>
       )}

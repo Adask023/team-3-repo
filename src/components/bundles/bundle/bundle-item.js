@@ -1,5 +1,13 @@
 import { gql, useQuery } from "@apollo/client";
-import { Container, Grid } from "@mui/material";
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Container,
+  Grid,
+  Typography,
+} from "@mui/material";
 import React from "react";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
@@ -35,28 +43,30 @@ function BundleItem() {
 
   return (
     <Container>
+      <Button variant="outlined" color="error" component={Link} to="/bundle">
+        back
+      </Button>
       <Grid container>
-        <Grid item xs={4} alignItems="center" justifyContent="center">
-          <Link to="/bundle">
-            <button>Back</button>
-          </Link>
-          <h1>{name}</h1>
-          <br />
+        <Grid item xs={6} alignItems="center" justifyContent="center">
+          <Card sx={{ maxWidth: "80%", padding: "1rem", marginTop: "2rem" }}>
+            <Typography gutterBottom variant="h4" component="div">
+              {name}
+            </Typography>
+            {/* <br />
           bundle id: {_id}
           <br />
           Creator id: {creatorId}
-          <br />
-          <h2>Description</h2>
-          <div>
-            <Description
-              _id={_id}
-              creatorId={creatorId}
-              description={description}
-            />
-          </div>
+          <br /> */}
+            <Typography variant="body1" color="text.secondary">
+              <Description
+                _id={_id}
+                creatorId={creatorId}
+                description={description}
+              />
+            </Typography>
+          </Card>
         </Grid>
-        <Grid item xs={8} alignItems="center" justifyContent="center">
-          <br />
+        <Grid item xs={6} alignItems="center" justifyContent="center">
           <BundleTagsPagination _id={_id} />
         </Grid>
       </Grid>
