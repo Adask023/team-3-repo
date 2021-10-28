@@ -5,7 +5,8 @@ import Grid from "@mui/material/Grid";
 import Input from "@mui/material/Input";
 import Stack from "@mui/material/Stack";
 import Switch from "@mui/material/Switch";
-import React, { useContext } from "react";
+import debounce from 'lodash.debounce'
+import React, { useContext, useState, useEffect } from "react";
 import UserInfoContext from "../../context/UserInfoContext";
 
 export const Settings = () => {
@@ -54,8 +55,12 @@ export const Settings = () => {
   const [assignBundleId] = useMutation(ADD_USERS_BUNDLE);
   const [deleteBundleId] = useMutation(DELETE_USER_BUNDLE);
   const { userInfo } = useContext(UserInfoContext);
+  const [ render, setRender ] = useState( )
   // if (error) return <div className="">Error: </div>;
   // if (loading) return <div className="">Loading...</div>;
+  useEffect( () => {
+    setRender(data?.tagBundleMany)
+  },[data] )
   const handleChange = (e, item) => {
     if (e.target.checked) {
       assignBundleId({
@@ -73,25 +78,28 @@ export const Settings = () => {
     }
   };
   const handleFilter = (e) => {
-    console.log(e.target.value);
-    data?.tagBundleMany.map((item) => {
-      let newItem = [...item.name]
-      return console.log(newItem);
-    });
+    const filteredData = data?.tagBundleMany.map((item) => {
+      let name = item.name.toLowerCase();
+      let value = e.target.value.toLowerCase();
+      if(name.includes(value)) {
+        return item
+      }
+    }).filter((item) => item !== undefined)
+    setRender(filteredData)
+    return console.log(filteredData)
   };
-  // aktywny filtr wyszukiwania?
   // podzielić je na jakieś grupy?
   // Alfabetycznie pogrupować?
-  console.log(data?.tagBundleMany);
-  console.log(dataUser?.getProfile.oauthId);
+  // console.log(data?.tagBundleMany);
+  // console.log(dataUser?.getProfile.oauthId);
   return (
     <Container>
-      <h2>{userInfo?.oauthId}</h2>
+      <h2>Witaj, {userInfo?.oauthId} !</h2>
       <Input style={{ marginTop: "5rem" }} onChange={handleFilter} />
       <h5>Find bundle</h5>
       <Grid container style={{ margin: "3rem 0" }}>
         {dataUser
-          ? data?.tagBundleMany.map((item) => {
+          ? render?.map((item) => {
               let checked = dataUser?.getProfile.tagBundles.find(
                 (bundle) => bundle._id === item._id
               );
