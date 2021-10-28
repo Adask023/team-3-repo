@@ -10,28 +10,19 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import { update } from "lodash";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import useDeleteEntry from "../../mutations/useDeleteEntry";
 import useUpdateEntry from "../../mutations/useUpdateEntry";
 import { currentTime } from "../../utils/dateUtils";
 import React from "react";
 
-const SingleEntry = ({
-  id,
-  startTime = "",
-  endTime = "",
-  tagBundle = "",
-  tagBundleOptions,
-  tag = "",
-  tagOptions,
-  order,
-  newEntryHandler,
-}) => {
+const SingleEntry = ({ entryData, tagBundleOptions, newEntryHandler }) => {
   const initialValues = {
-    startTime: startTime,
-    endTime: endTime,
+    startTime: entryData.startTime,
+    endTime: entryData.endTime,
+    tagBundleName: entryData.tag ? entryData.tag.tagBundle.name : "",
+    tagName: entryData.tag ? entryData.tag.name : "",
   };
   const [entryValues, setEntryValues] = useState(initialValues);
   const [deleteEntry] = useDeleteEntry();
@@ -40,7 +31,7 @@ const SingleEntry = ({
   const deleteEntryHandler = () => {
     deleteEntry({
       variables: {
-        entryId: id,
+        entryId: entryData._id,
       },
     });
   };
@@ -61,13 +52,18 @@ const SingleEntry = ({
     newEntryStartTime = entryValObj.endTime;
     setEntryValues(entryValObj);
     updateEntry({
-      variables: { entryId: id, record: entryValObj },
+      variables: { entryId: entryData._id, record: entryValObj },
     });
-    newEntryHandler(e, order, newEntryStartTime);
+    newEntryHandler(e, entryData.order, newEntryStartTime);
   };
 
   return (
-    <Stack spacing={2} direction="row">
+    <Stack
+      p={2}
+      spacing={2}
+      direction="row"
+      sx={{ border: "1px solid #cacaca", borderRadius: "1em" }}
+    >
       <br></br>
       <TextField
         label="Czas rozpoczęcia"
@@ -81,27 +77,32 @@ const SingleEntry = ({
         name={"endTime"}
         onChange={handleChange}
       ></TextField>
-      <FormControl sx={{ minWidth: 150 }}>
-        <InputLabel id={`tag-bundle-select-label-${id}`}>Tag Bundle</InputLabel>
+      <FormControl sx={{ minWidth: 150, maxWidth: 150 }}>
+        <InputLabel id={`tag-bundle-select-label-${entryData._id}`}>
+          Tag Bundle
+        </InputLabel>
         <Select
-          labelId={`tag-bundle-select-label-${id}`}
-          id={`tag-bundle-select-${id}`}
+          labelId={`tag-bundle-select-label-${entryData._id}`}
+          id={`tag-bundle-select-${entryData._id}`}
           label="Tag Bundle"
-          value={entryValues.tagBundle}
           name={"tagBundle"}
+          value={entryValues.tagBundleName}
+          onChange={(e) => console.log(e.target.value)}
         >
-          {tagBundleOptions?.map(({ description, _id }) => (
-            <MenuItem value={description} key={_id}>
-              {description}
+          <MenuItem value="">Brak</MenuItem>
+          {tagBundleOptions?.map((name, index) => (
+            <MenuItem value={name} key={index}>
+              {name}
             </MenuItem>
           ))}
         </Select>
       </FormControl>
       <Autocomplete
+        freeSolo
         disablePortal
-        id={`tag-field-${id}`}
-        options={tagOptions}
-        inputValue={entryValues.tag}
+        id={`tag-field-${entryData._id}`}
+        options={["tagOptions"]}
+        onInput={(e) => console.log(e.target.value)}
         name={"tag"}
         sx={{ width: 300 }}
         renderInput={(params) => <TextField {...params} label="Tag" />}
