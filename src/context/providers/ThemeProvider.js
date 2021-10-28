@@ -7,13 +7,6 @@ import React from "react";
 
 const theme = createTheme({
   palette: {
-    background: {
-      paper: "#173A5E",
-    },
-    text: {
-      primary: "#173A5E",
-      secondary: "#46505A",
-    },
     action: {
       active: "#001E3C",
     },

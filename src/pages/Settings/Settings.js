@@ -1,4 +1,3 @@
-/*eslint-disable*/
 import { gql, useMutation, useQuery } from "@apollo/client";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
@@ -87,6 +86,7 @@ export const Settings = () => {
     }).filter((item) => item !== undefined)
     setRender(filteredData)
     return console.log(filteredData)
+  };
   };
   // podzielić je na jakieś grupy?
   // Alfabetycznie pogrupować?
