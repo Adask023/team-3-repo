@@ -74,12 +74,7 @@ export const Entries = ({ date }) => {
   const incrementEntryOrders = (entryArr) => {
     return entryArr.map((entry) => {
       return {
-        entryId: entry._id,
-        tagName: entry.tagName,
-        tagBundleName: entry.tagBundleName,
-        date: entry.date,
-        startTime: entry.startTime,
-        endTime: entry.endTime,
+        ...entry,
         order: entry.order + 1,
       };
     });
@@ -108,7 +103,7 @@ export const Entries = ({ date }) => {
           <MemoizedSingleEntry
             key={entry._id}
             entryData={entry}
-            tagBundleOptions={getTagBundleOptions()}
+            tagBundles={userInfo?.tagBundles}
             newEntryHandler={addNewEntry}
           />
         ))}

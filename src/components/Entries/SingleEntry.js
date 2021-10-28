@@ -19,7 +19,7 @@ import React from "react";
 import { Form, Formik } from "formik";
 import { singleEntrySchema } from "../../schemas/singleEntrySchema";
 
-const SingleEntry = ({ entryData, tagBundleOptions, newEntryHandler }) => {
+const SingleEntry = ({ entryData, tagBundles, newEntryHandler }) => {
   const initialValues = {
     startTime: entryData.startTime,
     endTime: entryData.endTime ? entryData.endTime : "",
@@ -40,18 +40,20 @@ const SingleEntry = ({ entryData, tagBundleOptions, newEntryHandler }) => {
 
   const handleSubmit = (formData) => {
     console.log(formData);
-    const currentEntryEndTime = currentTime();
-    let newEntryStartTime;
-    const entryValObj = { ...formData };
-    if (entryValObj.endTime === "") {
-      entryValObj.endTime = currentEntryEndTime;
+    if (formData.tagBundleName && formData.tagName) {
+      const currentEntryEndTime = currentTime();
+      let newEntryStartTime;
+      const entryValObj = { ...formData };
+      if (entryValObj.endTime === "") {
+        entryValObj.endTime = currentEntryEndTime;
+      }
+      newEntryStartTime = entryValObj.endTime;
+      setEntryValues(entryValObj);
+      updateEntry({
+        variables: { entryId: entryData._id, record: entryValObj },
+      });
+      newEntryHandler(null, entryData.order, newEntryStartTime);
     }
-    newEntryStartTime = entryValObj.endTime;
-    setEntryValues(entryValObj);
-    updateEntry({
-      variables: { entryId: entryData._id, record: entryValObj },
-    });
-    newEntryHandler(null, entryData.order, newEntryStartTime);
   };
 
   return (
@@ -64,6 +66,7 @@ const SingleEntry = ({ entryData, tagBundleOptions, newEntryHandler }) => {
       {({
         handleChange,
         handleBlur,
+        handleSubmit,
         setValues,
         values,
         touched,
@@ -74,7 +77,7 @@ const SingleEntry = ({ entryData, tagBundleOptions, newEntryHandler }) => {
           setValues({ ...values, tagName: v });
         };
         return (
-          <Form>
+          <Form onBlur={handleSubmit}>
             <Stack
               p={2}
               spacing={2}
@@ -87,7 +90,7 @@ const SingleEntry = ({ entryData, tagBundleOptions, newEntryHandler }) => {
                 name="startTime"
                 onChange={handleChange}
                 value={values.startTime}
-              ></TextField>
+              />
               <TextField
                 type="text"
                 label="Czas zakończenia"
@@ -96,7 +99,7 @@ const SingleEntry = ({ entryData, tagBundleOptions, newEntryHandler }) => {
                 value={
                   values.endTime === "" ? entryValues.endTime : values.endTime
                 }
-              ></TextField>
+              />
               <FormControl sx={{ minWidth: 150, maxWidth: 150 }}>
                 <InputLabel>Tag Bundle</InputLabel>
                 <Select
@@ -106,7 +109,7 @@ const SingleEntry = ({ entryData, tagBundleOptions, newEntryHandler }) => {
                   value={values.tagBundleName}
                 >
                   <MenuItem value="">Brak</MenuItem>
-                  {tagBundleOptions?.map((name, index) => (
+                  {tagBundles?.map(({ name }, index) => (
                     <MenuItem value={name} key={index} name="tagBundleName">
                       {name}
                     </MenuItem>
@@ -114,9 +117,14 @@ const SingleEntry = ({ entryData, tagBundleOptions, newEntryHandler }) => {
                 </Select>
               </FormControl>
               <Autocomplete
-                freeSolo
                 disablePortal
-                options={["tagOptions"]}
+                options={
+                  values.tagBundleName
+                    ? tagBundles
+                        ?.find((tB) => tB.name === values.tagBundleName)
+                        ?.tags.map((t) => t.name) || []
+                    : []
+                }
                 sx={{ width: 300 }}
                 name="tagName"
                 disabled={values.tagBundleName === ""}
@@ -125,10 +133,10 @@ const SingleEntry = ({ entryData, tagBundleOptions, newEntryHandler }) => {
                 renderInput={(params) => <TextField {...params} label="Tag" />}
               />
               <Button type="submit" disabled={false}>
-                <AddCircleIcon></AddCircleIcon>
+                <AddCircleIcon />
               </Button>
               <Button onClick={deleteEntryHandler}>
-                <DeleteForeverIcon></DeleteForeverIcon>
+                <DeleteForeverIcon />
               </Button>
             </Stack>
           </Form>
