@@ -10,28 +10,21 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import { update } from "lodash";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import useDeleteEntry from "../../mutations/useDeleteEntry";
 import useUpdateEntry from "../../mutations/useUpdateEntry";
 import { currentTime } from "../../utils/dateUtils";
 import React from "react";
+import { Form, Formik } from "formik";
+import { singleEntrySchema } from "../../schemas/singleEntrySchema";
 
-const SingleEntry = ({
-  id,
-  startTime = "",
-  endTime = "",
-  tagBundle = "",
-  tagBundleOptions,
-  tag = "",
-  tagOptions,
-  order,
-  newEntryHandler,
-}) => {
+const SingleEntry = ({ entryData, tagBundles, newEntryHandler }) => {
   const initialValues = {
-    startTime: startTime,
-    endTime: endTime,
+    startTime: entryData.startTime,
+    endTime: entryData.endTime ? entryData.endTime : "",
+    tagBundleName: entryData.tag ? entryData.tag.tagBundle.name : "",
+    tagName: entryData.tag ? entryData.tag.name : "",
   };
   const [entryValues, setEntryValues] = useState(initialValues);
   const [deleteEntry] = useDeleteEntry();
@@ -40,79 +33,116 @@ const SingleEntry = ({
   const deleteEntryHandler = () => {
     deleteEntry({
       variables: {
-        entryId: id,
+        entryId: entryData._id,
       },
     });
   };
 
-  const handleChange = (e) => {
-    const obj = {};
-    obj[e.target.name] = e.target.value;
-    setEntryValues({ ...entryValues, ...obj });
-  };
-
-  const handleSubmit = (e) => {
-    const currentEntryEndTime = currentTime();
-    let newEntryStartTime;
-    const entryValObj = { ...entryValues };
-    if (!entryValues.endTime) {
-      entryValObj.endTime = currentEntryEndTime;
+  const handleSubmit = (formData) => {
+    console.log(formData);
+    if (formData.tagBundleName && formData.tagName) {
+      const currentEntryEndTime = currentTime();
+      let newEntryStartTime;
+      const entryValObj = { ...formData };
+      if (entryValObj.endTime === "") {
+        entryValObj.endTime = currentEntryEndTime;
+      }
+      newEntryStartTime = entryValObj.endTime;
+      setEntryValues(entryValObj);
+      updateEntry({
+        variables: { entryId: entryData._id, record: entryValObj },
+      });
+      newEntryHandler(null, entryData.order, newEntryStartTime);
     }
-    newEntryStartTime = entryValObj.endTime;
-    setEntryValues(entryValObj);
-    updateEntry({
-      variables: { entryId: id, record: entryValObj },
-    });
-    newEntryHandler(e, order, newEntryStartTime);
   };
 
   return (
-    <Stack spacing={2} direction="row">
-      <br></br>
-      <TextField
-        label="Czas rozpoczęcia"
-        value={entryValues.startTime}
-        name={"startTime"}
-        onChange={handleChange}
-      ></TextField>
-      <TextField
-        label="Czas zakończenia"
-        value={entryValues.endTime}
-        name={"endTime"}
-        onChange={handleChange}
-      ></TextField>
-      <FormControl sx={{ minWidth: 150 }}>
-        <InputLabel id={`tag-bundle-select-label-${id}`}>Tag Bundle</InputLabel>
-        <Select
-          labelId={`tag-bundle-select-label-${id}`}
-          id={`tag-bundle-select-${id}`}
-          label="Tag Bundle"
-          value={entryValues.tagBundle}
-          name={"tagBundle"}
-        >
-          {tagBundleOptions?.map(({ description, _id }) => (
-            <MenuItem value={description} key={_id}>
-              {description}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <Autocomplete
-        disablePortal
-        id={`tag-field-${id}`}
-        options={tagOptions}
-        inputValue={entryValues.tag}
-        name={"tag"}
-        sx={{ width: 300 }}
-        renderInput={(params) => <TextField {...params} label="Tag" />}
-      />
-      <Button onClick={handleSubmit}>
-        <AddCircleIcon></AddCircleIcon>
-      </Button>
-      <Button onClick={deleteEntryHandler}>
-        <DeleteForeverIcon></DeleteForeverIcon>
-      </Button>
-    </Stack>
+    <Formik
+      validationSchema={singleEntrySchema}
+      onSubmit={handleSubmit}
+      initialValues={initialValues}
+      isInitialValid={false}
+    >
+      {({
+        handleChange,
+        handleBlur,
+        handleSubmit,
+        setValues,
+        values,
+        touched,
+        isValid,
+        errors,
+      }) => {
+        const handleAutocompleteChange = (e, v) => {
+          setValues({ ...values, tagName: v });
+        };
+        return (
+          <Form onBlur={handleSubmit}>
+            <Stack
+              p={2}
+              spacing={2}
+              direction="row"
+              sx={{ border: "1px solid #cacaca", borderRadius: "1em" }}
+            >
+              <TextField
+                type="text"
+                label="Czas rozpoczęcia"
+                name="startTime"
+                onChange={handleChange}
+                value={values.startTime}
+              />
+              <TextField
+                type="text"
+                label="Czas zakończenia"
+                name="endTime"
+                onChange={handleChange}
+                value={
+                  values.endTime === "" ? entryValues.endTime : values.endTime
+                }
+              />
+              <FormControl sx={{ minWidth: 150, maxWidth: 150 }}>
+                <InputLabel>Tag Bundle</InputLabel>
+                <Select
+                  label="Tag Bundle"
+                  name="tagBundleName"
+                  onChange={handleChange}
+                  value={values.tagBundleName}
+                >
+                  <MenuItem value="">Brak</MenuItem>
+                  {tagBundles?.map(({ name }, index) => (
+                    <MenuItem value={name} key={index} name="tagBundleName">
+                      {name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <Autocomplete
+                disablePortal
+                options={
+                  values.tagBundleName
+                    ? tagBundles
+                        ?.find((tB) => tB.name === values.tagBundleName)
+                        ?.tags.map((t) => t.name) || []
+                    : []
+                }
+                sx={{ width: 300 }}
+                name="tagName"
+                disabled={values.tagBundleName === ""}
+                value={values.tagName}
+                onInputChange={(e, v) => handleAutocompleteChange(e, v)}
+                renderInput={(params) => <TextField {...params} label="Tag" />}
+              />
+              <Button type="submit" disabled={false}>
+                <AddCircleIcon />
+              </Button>
+              <Button onClick={deleteEntryHandler}>
+                <DeleteForeverIcon />
+              </Button>
+            </Stack>
+          </Form>
+        );
+      }}
+    </Formik>
   );
 };
 

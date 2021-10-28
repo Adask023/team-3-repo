@@ -6,7 +6,7 @@ import { useContext, useEffect, useMemo, useState } from "react";
 import useUpdateEntry from "../../mutations/useUpdateEntry";
 import useCreateNewEntry from "../../mutations/useCreateNewEntry";
 import useAllEntriesFilterByDate from "../../queries/useAllEntriesFilterByDate";
-import { currentTime, zeroPad } from "../../utils/dateUtils";
+import { currentTime } from "../../utils/dateUtils";
 import { MemoizedSingleEntry } from "./SingleEntry";
 import { UserInfoContext } from "../../context/UserInfoContext";
 
@@ -66,12 +66,7 @@ export const Entries = ({ date }) => {
   const incrementEntryOrders = (entryArr) => {
     return entryArr.map((entry) => {
       return {
-        entryId: entry._id,
-        tagName: entry.tagName,
-        tagBundleName: entry.tagBundleName,
-        date: entry.date,
-        startTime: entry.startTime,
-        endTime: entry.endTime,
+        ...entry,
         order: entry.order + 1,
       };
     });
@@ -96,17 +91,11 @@ export const Entries = ({ date }) => {
       <Button onClick={addNewEntry}>Add new entry</Button>
 
       <Stack sx={{ pt: 5 }} spacing={4}>
-        {entries?.map((e) => (
+        {entries?.map((entry) => (
           <MemoizedSingleEntry
-            key={e._id}
-            id={e._id}
-            startTime={e.startTime}
-            endTime={e.endTime}
-            tagBundle={"bundle"}
-            tagBundleOptions={["userInfo.tagBundles"]}
-            tag={"tag"}
-            tagOptions={["tag", "b", "c"]}
-            order={e.order}
+            key={entry._id}
+            entryData={entry}
+            tagBundles={userInfo?.tagBundles}
             newEntryHandler={addNewEntry}
           />
         ))}
