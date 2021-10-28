@@ -9,6 +9,8 @@ import useAllEntriesFilterByDate from "../../queries/useAllEntriesFilterByDate";
 import { currentTime } from "../../utils/dateUtils";
 import { MemoizedSingleEntry } from "./SingleEntry";
 import { UserInfoContext } from "../../context/UserInfoContext";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import StopIcon from "@mui/icons-material/Stop";
 
 export const Entries = ({ date }) => {
   const { data, loading } = useAllEntriesFilterByDate(date);
@@ -35,7 +37,7 @@ export const Entries = ({ date }) => {
 
   const getTagBundleOptions = () => {
     const tagBundles = userInfo.tagBundles;
-    if(!tagBundles) return [];
+    if (!tagBundles) return [];
     return tagBundles.map((tb) => tb.name);
   };
 
@@ -110,6 +112,24 @@ export const Entries = ({ date }) => {
             newEntryHandler={addNewEntry}
           />
         ))}
+      </Stack>
+      <Stack
+        direction="row"
+        sx={{
+          position: "fixed",
+          bottom: "10%",
+          right: "10%",
+          backgroundColor: "white",
+          borderRadius: "1em",
+          border: "1px solid lightgray",
+        }}
+      >
+        <Button>
+          <StopIcon />
+        </Button>
+        <Button>
+          <ContentCopyIcon />
+        </Button>
       </Stack>
     </Box>
   );
