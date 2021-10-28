@@ -12,22 +12,9 @@ import React from "react";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 
+import { GET_BUNDLE_BY_ID } from "../../../queries/Bundle-page/GetBundleById";
 import BundleTagsPagination from "./BundleTagsPagination";
 import Description from "./Description";
-
-const GET_BUNDLE_BY_ID = gql`
-  query getBundle($bundleSetId: MongoID!) {
-    tagBundleById(_id: $bundleSetId) {
-      name
-      description
-      creatorId
-      tags {
-        name
-        _id
-      }
-    }
-  }
-`;
 
 function BundleItem() {
   let { _id } = useParams();
@@ -46,9 +33,9 @@ function BundleItem() {
       <Button variant="outlined" color="error" component={Link} to="/bundle">
         back
       </Button>
-      <Grid container>
+      <Grid container sx={{ marginTop: "2rem" }}>
         <Grid item xs={6} alignItems="center" justifyContent="center">
-          <Card sx={{ maxWidth: "80%", padding: "1rem", marginTop: "2rem" }}>
+          <Card sx={{ maxWidth: "80%", padding: "1rem" }}>
             <Typography gutterBottom variant="h4" component="div">
               {name}
             </Typography>

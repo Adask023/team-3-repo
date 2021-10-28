@@ -1,19 +1,21 @@
-/* eslint-disable */
+// /* eslint-disable */
 import { gql, useMutation } from "@apollo/client";
-import { Button, CardActions, TextField } from "@mui/material";
+import { Button, CardActions, TextField, Typography } from "@mui/material";
 import React, { useContext, useState } from "react";
-import UserInfoContext from "../../../context/UserInfoContext";
 
-const UPDATE_DESCRIPTION = gql`
-  mutation updateDescription(
-    $id: MongoID!
-    $record: UpdateByIdTagBundleInput!
-  ) {
-    tagBundleUpdateById(_id: $id, record: $record) {
-      recordId
-    }
-  }
-`;
+import UserInfoContext from "../../../context/UserInfoContext";
+import { UPDATE_DESCRIPTION } from "../../../mutations/Bundle-page/UpdateDescription";
+
+// const UPDATE_DESCRIPTION = gql`
+//   mutation updateDescription(
+//     $id: MongoID!
+//     $record: UpdateByIdTagBundleInput!
+//   ) {
+//     tagBundleUpdateById(_id: $id, record: $record) {
+//       recordId
+//     }
+//   }
+// `;
 
 function Description({ _id, creatorId, description }) {
   const [descriptionToChange, setDescriptionToChange] = useState(description);
@@ -41,10 +43,17 @@ function Description({ _id, creatorId, description }) {
 
   return (
     <div>
-      {/* <p>Bundle ID: {_id}</p>
-      <p>UserId: {userId}</p>
-      <p>CreatorId: {creatorId}</p>
-      <p>description: {description}</p> */}
+      {/* <p>Bundle ID: {_id}</p> */}
+      {/* <p>UserId: {userId}</p>
+      <p>CreatorId: {creatorId}</p> */}
+      {userId == creatorId ? (
+        <Typography variant="caption" color="green">
+          You are the owner of that bundle
+        </Typography>
+      ) : (
+        ""
+      )}
+      {/* <p>description: {description}</p> */}
 
       {userId == creatorId ? (
         <>

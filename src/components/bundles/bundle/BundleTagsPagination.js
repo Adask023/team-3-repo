@@ -11,34 +11,11 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 
-const GET_TAGS_WITH_PAGINATION = gql`
-  query getPagination($bundleId: MongoID, $page: Int, $perPage: Int) {
-    tagPagination(
-      filter: { tagBundleId: $bundleId }
-      page: $page
-      perPage: $perPage
-    ) {
-      pageInfo {
-        pageCount
-        itemCount
-        hasNextPage
-        hasPreviousPage
-        currentPage
-      }
-      items {
-        name
-        _id
-      }
-      count
-    }
-  }
-`;
-
-// TO DO OPTIONAL
-// component przy zmianie przycisków renderuje się dwukrotnie, jak starczy czasy to spróbować to zoptymalizować
+import { GET_TAGS_WITH_PAGINATION } from "../../../queries/Bundle-page/GetTagsWithPagination";
 
 function BundleTagsPagination({ _id }) {
   const [currentPageNumber, setCurrentPageNumber] = useState(0);
@@ -122,32 +99,38 @@ function BundleTagsPagination({ _id }) {
 
   return (
     <div>
-      <Paper sx={{ width: "100%" }}>
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell align="left" colSpan={2}>
-                  Name
-                </TableCell>
-                {/* <TableCell align="center" colSpan={3}>
+      {tagsToDisplay.length > 0 ? (
+        <Paper sx={{ width: "100%" }}>
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell align="left" colSpan={2}>
+                    Name
+                  </TableCell>
+                  {/* <TableCell align="center" colSpan={3}>
                   Details
                 </TableCell> */}
-              </TableRow>
-            </TableHead>
-            <TableBody>{tagsToDisplay}</TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[10, 20, 30]}
-          onPageChange={handleChangePage}
-          rowsPerPage={paginationLimit}
-          count={count}
-          component="div"
-          page={currentPageNumber}
-          onRowsPerPageChange={(e) => handlePaginationChange(e)}
-        ></TablePagination>
-      </Paper>
+                </TableRow>
+              </TableHead>
+              <TableBody>{tagsToDisplay}</TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[10, 20, 30]}
+            onPageChange={handleChangePage}
+            rowsPerPage={paginationLimit}
+            count={count}
+            component="div"
+            page={currentPageNumber}
+            onRowsPerPageChange={(e) => handlePaginationChange(e)}
+          ></TablePagination>
+        </Paper>
+      ) : (
+        <Typography variant="h6" color="red">
+          No tags in this bundle
+        </Typography>
+      )}
     </div>
   );
 }

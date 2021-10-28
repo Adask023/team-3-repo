@@ -11,13 +11,7 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 
-const ADD_BUNDLE = gql`
-  mutation createClient($record: CreateOneTagBundleInput!) {
-    tagBundleCreateOne(record: $record) {
-      recordId
-    }
-  }
-`;
+import { ADD_BUNDLE } from "../../../queries/Bundle-page/AddBundle";
 
 const styles = {
   wrapper: {
@@ -30,7 +24,7 @@ const styles = {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    backdropFilter: "blur(3px)",
+    backdropFilter: "blur(2px)",
   },
 };
 
@@ -88,7 +82,6 @@ function AddBundlePopUp({ setPopUpActive }) {
             label="Bundle description"
             multiline
             rows={4}
-            maxRows={6}
             value={inputDescription}
             onChange={(e) => setInputDescription(e.target.value)}
             style={{ marginBottom: "1rem" }}

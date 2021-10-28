@@ -1,4 +1,3 @@
-import { gql } from "@apollo/client";
 import AddIcon from "@mui/icons-material/Add";
 import { Button, Container, Grid, IconButton, Typography } from "@mui/material";
 import React, { useState } from "react";
@@ -7,34 +6,22 @@ import { Link as RouterLink } from "react-router-dom";
 import useAllBundles from "../../queries/useAllBundles";
 import AddBundlePopUp from "./bundle/AddBundlePopUp";
 
-const GET_ALL_BUNDLES = gql`
-  query GetAllBundles {
-    tagBundleMany {
-      _id
-      name
-      creatorId
-    }
-  }
-`;
-
 const styles = {
   addBtn: {
     position: "fixed",
     bottom: "2rem",
     right: "2rem",
+    zIndex: "999",
   },
 };
 
 const Bundles = () => {
-  const { data, loading, error } = useAllBundles(GET_ALL_BUNDLES);
+  const { data, loading, error } = useAllBundles();
   const [isPopUpActive, setPopUpActive] = useState(false);
-  // const [userId, setUserId] = useState("61671921b7efc009eaf79450");
-  // console.log(data);
 
   if (loading) return <div>loading...</div>;
   if (error) return <div>error</div>;
 
-  // example data structure singleBundle._id
   return (
     <Container>
       <div>
@@ -58,7 +45,7 @@ const Bundles = () => {
         color="textPrimary"
         align="center"
       >
-        Bundles list
+        BUNDLES LIST
       </Typography>
       <Grid container spacing={1} style={{ margin: "3rem 0" }}>
         {data.tagBundleMany.map(({ _id, name }) => {
