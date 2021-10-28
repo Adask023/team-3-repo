@@ -4,22 +4,17 @@
     "plugin:react/recommended",
     "plugin:prettier/recommended"
   ],
-  "plugins": ["prettier", "react", "react-hooks"],
+  "plugins": ["prettier", "react", "react-hooks", "simple-import-sort"],
   "rules": {
     "no-console": "warn",
-    "prettier/prettier": [
-      "warn",
-      {
-        "endOfLine": "auto"
-      }
-    ],
+    "prettier/prettier": "error",
     "react/display-name": "off",
     "react/no-children-prop": "off",
     "react/react-in-jsx-scope": "warn",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
-    // "simple-import-sort/imports": "warn",
-    // "simple-import-sort/exports": "error",
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error",
     //FIXME: CHCECIE UŻYWAĆ???
     "react/prop-types": 0
   },
