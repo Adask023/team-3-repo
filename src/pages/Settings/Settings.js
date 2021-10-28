@@ -21,7 +21,7 @@ export const Settings = () => {
   const { data: dataUser } = useQuery(SHOW_USER_BUNDLES);
   const [assignBundleId] = useMutation(ADD_USERS_BUNDLE);
   const [deleteBundleId] = useMutation(DELETE_USER_BUNDLE);
-  const { userInfo, setUserInfo } = useContext(UserInfoContext);
+  const { userInfo } = useContext(UserInfoContext);
   const [ render, setRender ] = useState( )
   // if (error) return <div className="">Error: </div>;
   // if (loading) return <div className="">Loading...</div>;
@@ -36,7 +36,8 @@ export const Settings = () => {
             bundleId: item._id,
           },
         });
-        setUserInfo({...userInfo});
+        console.log(userInfo)
+        // setUserInfo({...userInfo});
         //tutaj jest błąd, muszę zwrócić obiekt a potem dopiero zrwócić tablicę z nową wartością 
       }
       if (!e.target.checked) {
@@ -45,7 +46,7 @@ export const Settings = () => {
             bundleId: item._id,
           },
         });
-        setUserInfo(userInfo.filter((itemNew) => itemNew !== item))
+        // setUserInfo(userInfo.filter((itemNew) => itemNew !== item))
       }
     },
     [assignBundleId, deleteBundleId]
@@ -73,8 +74,8 @@ export const Settings = () => {
       <CircularProgress />
     </Box>
   );
-  // console.log(data?.tagBundleMany);
-  // console.log(dataUser?.getProfile.oauthId);
+  console.log(data?.tagBundleMany);
+  console.log(dataUser?.getProfile.tagBundles);
   console.log(userInfo)
   return (
     <Container>
@@ -84,7 +85,7 @@ export const Settings = () => {
       <Grid container style={{ margin: "3rem 0" }}>
         {dataUser
           ? render?.map((item) => {
-              let checked = userInfo.find(
+              let checked = dataUser?.getProfile.tagBundles.find(
                 (bundle) => bundle._id === item._id
               );
               return (
