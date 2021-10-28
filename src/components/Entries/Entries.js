@@ -151,9 +151,6 @@ export const Entries = ({ date }) => {
           border: "1px solid lightgray",
         }}
       >
-        <Button>
-          <StopIcon />
-        </Button>
         <Button onClick={handleCopy}>
           <ContentCopyIcon />
         </Button>
