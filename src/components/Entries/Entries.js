@@ -42,6 +42,13 @@ export const Entries = ({ date }) => {
     return tagBundles.map((tb) => tb.name);
   };
 
+  const handleCopy = () => {
+    navigator.clipboard.writeText(entries.map((e) => {
+      console.log(e);
+      return `${e.startTime} ${e.endTime} ${e.tag?.tagBundle.name}-${e.tag?.name}`
+    }).join("\n"));
+  }
+
   const addNewEntry = (e, order, startTime, currentEntry) => {
     let orderNo = 0;
     if (order === undefined) {
@@ -60,7 +67,11 @@ export const Entries = ({ date }) => {
       updateSingleEntry(currentEntry._id, omit(currentEntry, "_id"));
     }
     let time = startTime;
-    if (!startTime) time = currentTime();
+    console.log("costam", startTime)
+    if (!time) {
+      console.log("no start time")
+      time = currentTime();
+    }
     addEntry({
       variables: {
         record: { startTime: time, date: date, order: orderNo },
@@ -143,7 +154,7 @@ export const Entries = ({ date }) => {
         <Button>
           <StopIcon />
         </Button>
-        <Button>
+        <Button onClick={handleCopy}>
           <ContentCopyIcon />
         </Button>
       </Stack>

@@ -27,6 +27,7 @@ const SingleEntry = ({ entryData, tagBundles, newEntryHandler }) => {
     tagName: entryData.tag ? entryData.tag.name : "",
   };
   const [entryValues, setEntryValues] = useState(initialValues);
+  const [endTime, setEndTime] = useState("");
   const [deleteEntry] = useDeleteEntry();
   const [updateEntry] = useUpdateEntry();
 
@@ -55,7 +56,7 @@ const SingleEntry = ({ entryData, tagBundles, newEntryHandler }) => {
     if (entryValObj.endTime === "") {
       entryValObj.endTime = currentEntryEndTime;
     }
-    let newEntryStartTime;
+    let newEntryStartTime = endTime;
     setEntryValues(entryValObj);
     const _id = entryData._id;
     newEntryHandler(null, entryData.order, newEntryStartTime, {
@@ -103,7 +104,10 @@ const SingleEntry = ({ entryData, tagBundles, newEntryHandler }) => {
                 type="text"
                 label="Czas zakończenia"
                 name="endTime"
-                onChange={handleChange}
+                onChange={(e) => {
+                  handleChange(e);
+                  setEndTime(e.target.value);
+                }}
                 value={
                   values.endTime === "" ? entryValues.endTime : values.endTime
                 }
