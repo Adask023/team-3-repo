@@ -11,6 +11,7 @@ import { MemoizedSingleEntry } from "./SingleEntry";
 import { UserInfoContext } from "../../context/UserInfoContext";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import StopIcon from "@mui/icons-material/Stop";
+import { omit } from "lodash";
 
 export const Entries = ({ date }) => {
   const { data, loading } = useAllEntriesFilterByDate(date);
@@ -41,22 +42,22 @@ export const Entries = ({ date }) => {
     return tagBundles.map((tb) => tb.name);
   };
 
-  const addNewEntry = (e, order, startTime) => {
+  const addNewEntry = (e, order, startTime, currentEntry) => {
     let orderNo = 0;
     if (order === undefined) {
       entries.length > 0 ? (orderNo = minOrderNo - 1) : (orderNo = 0);
     } else if (maxOrderNo > order) {
       orderNo = order + 1;
+      console.log(currentEntry, entries);
       let entriesToUpdate = entriesAfterOrderNo(orderNo);
       entriesToUpdate = incrementEntryOrders(entriesToUpdate);
-      entriesToUpdate.forEach((entry) => {
-        let { entryId, ...rest } = entry;
-        updateEntry({
-          variables: { entryId: entryId, record: rest },
-        });
+      [currentEntry, ...entriesToUpdate].forEach((entry) => {
+        let { _id, ...rest } = entry;
+        updateSingleEntry(_id, rest);
       });
     } else {
       orderNo = maxOrderNo + 1;
+      updateSingleEntry(currentEntry._id, omit(currentEntry, "_id"));
     }
     let time = startTime;
     if (!startTime) time = currentTime();
@@ -67,8 +68,28 @@ export const Entries = ({ date }) => {
     });
   };
 
+  const updateSingleEntry = (id, entry) => {
+    updateEntry({
+      variables: {
+        entryId: id,
+        record: entry,
+      },
+    });
+  }
+
   const entriesAfterOrderNo = (order) => {
-    return entries.filter((e) => e.order >= order);
+    return entries
+      .filter((e) => e.order >= order)
+      .map((entry) => {
+        return {
+          _id: entry._id,
+          tagName: entry.tag?.name,
+          tagBundleName: entry.tag?.tagBundle.name,
+          startTime: entry.startTime,
+          endTime: entry.endTime,
+          order: entry.order,
+        };
+      });
   };
 
   const incrementEntryOrders = (entryArr) => {

@@ -39,21 +39,29 @@ const SingleEntry = ({ entryData, tagBundles, newEntryHandler }) => {
   };
 
   const handleSubmit = (formData) => {
-    console.log(formData);
-    if (formData.tagBundleName && formData.tagName) {
-      const currentEntryEndTime = currentTime();
-      let newEntryStartTime;
-      const entryValObj = { ...formData };
-      if (entryValObj.endTime === "") {
-        entryValObj.endTime = currentEntryEndTime;
-      }
-      newEntryStartTime = entryValObj.endTime;
-      setEntryValues(entryValObj);
-      updateEntry({
-        variables: { entryId: entryData._id, record: entryValObj },
-      });
-      newEntryHandler(null, entryData.order, newEntryStartTime);
+    const record = { ...formData };
+    if (!(formData.tagBundleName && formData.tagName)) {
+      record.tagBundleName = null;
+      record.tagName = null;
     }
+    updateEntry({
+      variables: { entryId: entryData._id, record: record },
+    });
+  };
+
+  const handleAddNewEntry = () => {
+    const currentEntryEndTime = currentTime();
+    const entryValObj = { ...entryValues };
+    if (entryValObj.endTime === "") {
+      entryValObj.endTime = currentEntryEndTime;
+    }
+    let newEntryStartTime;
+    setEntryValues(entryValObj);
+    const _id = entryData._id;
+    newEntryHandler(null, entryData.order, newEntryStartTime, {
+      _id,
+      ...entryValObj,
+    });
   };
 
   return (
@@ -118,6 +126,7 @@ const SingleEntry = ({ entryData, tagBundles, newEntryHandler }) => {
               </FormControl>
               <Autocomplete
                 disablePortal
+                freeSolo
                 options={
                   values.tagBundleName
                     ? tagBundles
@@ -132,7 +141,7 @@ const SingleEntry = ({ entryData, tagBundles, newEntryHandler }) => {
                 onInputChange={(e, v) => handleAutocompleteChange(e, v)}
                 renderInput={(params) => <TextField {...params} label="Tag" />}
               />
-              <Button type="submit" disabled={false}>
+              <Button onClick={handleAddNewEntry} name="add">
                 <AddCircleIcon />
               </Button>
               <Button onClick={deleteEntryHandler}>
