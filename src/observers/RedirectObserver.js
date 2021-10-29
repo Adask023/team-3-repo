@@ -15,7 +15,8 @@ export const RedirectObserver = ({ children }) => {
     if (!isAuthenticated && !isLoading) push(ROUTES.LOGIN);
     if (pathname === ROUTES.LOGIN && isAuthenticated) push(ROUTES.START);
     if (pathname === ROUTES.START && isAuthenticated) push(ROUTES.CALENDAR);
-    // if (!findRoute) push(ROUTES.NOT_FOUND);
+    if (!findRoute && pathname.includes(ROUTES.BUNDLE_ITEM))
+      push(ROUTES.NOT_FOUND);
   }, [pathname, push, findRoute, isAuthenticated, isLoading]);
 
   return children;

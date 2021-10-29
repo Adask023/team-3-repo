@@ -7,7 +7,8 @@ import { Login } from "../pages/Login/Login.jsx";
 export const AppRoutes = () => {
   return (
     <Switch>
-      <Route exact path={ROUTES.LOGIN} component={Login} />
+      <Route exact path={ROUTES.START} />
+      <Route path={ROUTES.LOGIN} component={Login} />
     </Switch>
   );
 };

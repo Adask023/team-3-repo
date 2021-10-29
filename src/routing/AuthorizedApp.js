@@ -13,7 +13,6 @@ export const AuthorizedApp = () => {
   return (
     <AuthorizedLayout>
       <Switch>
-        <Route exact path={ROUTES.START} />
         <Route path={ROUTES.CALENDAR} component={Calendar} />
         <Route exact path={ROUTES.BUNDLE} component={Bundle} />
         <Route path={ROUTES.BUNDLE_ITEM} component={BundleItem} />
