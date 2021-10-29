@@ -10,7 +10,7 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import useDeleteEntry from "../../mutations/useDeleteEntry";
 import useUpdateEntry from "../../mutations/useUpdateEntry";
@@ -26,7 +26,9 @@ const SingleEntry = ({ entryData, tagBundles, newEntryHandler }) => {
     tagBundleName: entryData.tag ? entryData.tag.tagBundle.name : "",
     tagName: entryData.tag ? entryData.tag.name : "",
   };
-  const [entryValues, setEntryValues] = useState(initialValues);
+  const formRef = useRef();
+
+  const [endTime, setEndTime] = useState("");
   const [deleteEntry] = useDeleteEntry();
   const [updateEntry] = useUpdateEntry();
 
@@ -39,21 +41,26 @@ const SingleEntry = ({ entryData, tagBundles, newEntryHandler }) => {
   };
 
   const handleSubmit = (formData) => {
-    console.log(formData);
-    if (formData.tagBundleName && formData.tagName) {
-      const currentEntryEndTime = currentTime();
-      let newEntryStartTime;
-      const entryValObj = { ...formData };
-      if (entryValObj.endTime === "") {
-        entryValObj.endTime = currentEntryEndTime;
-      }
-      newEntryStartTime = entryValObj.endTime;
-      setEntryValues(entryValObj);
-      updateEntry({
-        variables: { entryId: entryData._id, record: entryValObj },
-      });
-      newEntryHandler(null, entryData.order, newEntryStartTime);
+    const record = { ...formData };
+    if (!(formData.tagBundleName && formData.tagName)) {
+      record.tagBundleName = null;
+      record.tagName = null;
     }
+    updateEntry({
+      variables: { entryId: entryData._id, record: record },
+    });
+  };
+
+  const handleAddNewEntry = () => {
+    const entryValObj = formRef.current.values;
+    if (entryValObj.endTime === "") {
+      entryValObj.endTime = currentTime();
+    }
+    const _id = entryData._id;
+    newEntryHandler(null, entryData.order, entryValObj.endTime, {
+      _id,
+      ...entryValObj,
+    });
   };
 
   return (
@@ -62,6 +69,7 @@ const SingleEntry = ({ entryData, tagBundles, newEntryHandler }) => {
       onSubmit={handleSubmit}
       initialValues={initialValues}
       isInitialValid={false}
+      innerRef={formRef}
     >
       {({
         handleChange,
@@ -95,10 +103,11 @@ const SingleEntry = ({ entryData, tagBundles, newEntryHandler }) => {
                 type="text"
                 label="Czas zakończenia"
                 name="endTime"
-                onChange={handleChange}
-                value={
-                  values.endTime === "" ? entryValues.endTime : values.endTime
-                }
+                onChange={(e) => {
+                  handleChange(e);
+                  setEndTime(e.target.value);
+                }}
+                value={values.endTime}
               />
               <FormControl sx={{ minWidth: 150, maxWidth: 150 }}>
                 <InputLabel>Tag Bundle</InputLabel>
@@ -118,6 +127,7 @@ const SingleEntry = ({ entryData, tagBundles, newEntryHandler }) => {
               </FormControl>
               <Autocomplete
                 disablePortal
+                freeSolo
                 options={
                   values.tagBundleName
                     ? tagBundles
@@ -132,7 +142,7 @@ const SingleEntry = ({ entryData, tagBundles, newEntryHandler }) => {
                 onInputChange={(e, v) => handleAutocompleteChange(e, v)}
                 renderInput={(params) => <TextField {...params} label="Tag" />}
               />
-              <Button type="submit" disabled={false}>
+              <Button onClick={handleAddNewEntry} name="add">
                 <AddCircleIcon />
               </Button>
               <Button onClick={deleteEntryHandler}>

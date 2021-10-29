@@ -1,43 +1,86 @@
-import { gql } from "@apollo/client";
-import { Container, Grid } from "@mui/material";
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import AddIcon from "@mui/icons-material/Add";
+import { Button, Container, Grid, IconButton, Typography } from "@mui/material";
+import React, { useContext, useState } from "react";
+import { Link as RouterLink } from "react-router-dom";
 
+import UserInfoContext from "../../context/UserInfoContext";
 import useAllBundles from "../../queries/useAllBundles";
 import AddBundlePopUp from "./bundle/AddBundlePopUp";
 
-const GET_ALL_BUNDLES = gql`
-  query GetAllBundles {
-    tagBundleMany {
-      _id
-      name
-      creatorId
-    }
-  }
-`;
+const styles = {
+  addBtn: {
+    position: "fixed",
+    bottom: "2rem",
+    right: "2rem",
+    zIndex: "999",
+  },
+};
 
 const Bundles = () => {
-  const { data, loading, error } = useAllBundles(GET_ALL_BUNDLES);
+  const { data, loading, error } = useAllBundles();
   const [isPopUpActive, setPopUpActive] = useState(false);
-  // const [userId, setUserId] = useState("61671921b7efc009eaf79450");
-  // console.log(data);
+  const { userInfo } = useContext(UserInfoContext);
 
   if (loading) return <div>loading...</div>;
   if (error) return <div>error</div>;
 
-  // example data structure singleBundle._id
+  console.log(data.tagBundleMany);
+  console.log(userInfo._id);
+
+  // const myTags = data.tagBundleMany.map(({ creatorId, _id, name }) => {
+  //   if (creatorId == userInfo._id) {
+  //     return (
+  //       <Grid
+  //         item
+  //         xs={12}
+  //         sm={6}
+  //         md={4}
+  //         key={_id}
+  //         container
+  //         alignItems="center"
+  //         justifyContent="center"
+  //         style={{ marginBottom: "0.6rem" }}
+  //       >
+  //         <Button
+  //           style={{ minWidth: "100%", minHeight: "100%" }}
+  //           size="big"
+  //           component={RouterLink}
+  //           to={`/bundle/${_id}`}
+  //         >
+  //           {name}
+  //         </Button>
+  //       </Grid>
+  //     );
+  //   }
+  // });
+
   return (
     <Container>
       <div>
         {!isPopUpActive && (
-          <button onClick={() => setPopUpActive(true)}>ADD NEW BUNDLE</button>
+          <Button
+            style={styles.addBtn}
+            variant="contained"
+            color="primary"
+            endIcon={<AddIcon />}
+            onClick={() => setPopUpActive(true)}
+          >
+            Add Bundle
+          </Button>
         )}
 
         {isPopUpActive && <AddBundlePopUp setPopUpActive={setPopUpActive} />}
       </div>
-      <h1>Bundles list:</h1>
-      <Grid container style={{ margin: "3rem 0" }}>
-        {data.tagBundleMany.map(({ _id, name }) => {
+      <Typography
+        style={{ marginTop: "2rem" }}
+        variant="h4"
+        color="textPrimary"
+        align="center"
+      >
+        BUNDLES LIST
+      </Typography>
+      <Grid container spacing={1} style={{ margin: "3rem 0" }}>
+        {data.tagBundleMany.map(({ creatorId, _id, name }) => {
           return (
             <Grid
               item
@@ -50,7 +93,15 @@ const Bundles = () => {
               justifyContent="center"
               style={{ marginBottom: "0.6rem" }}
             >
-              <Link to={`/bundle/${_id}`}>{name}</Link>
+              <Button
+                style={creatorId === userInfo._id ? { color: "green" } : {}}
+                sx={{ minWidth: "100%", minHeight: "100%" }}
+                size="big"
+                component={RouterLink}
+                to={`/bundle/${_id}`}
+              >
+                {name}
+              </Button>
             </Grid>
           );
         })}

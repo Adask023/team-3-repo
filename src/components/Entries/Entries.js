@@ -9,6 +9,9 @@ import useAllEntriesFilterByDate from "../../queries/useAllEntriesFilterByDate";
 import { currentTime } from "../../utils/dateUtils";
 import { MemoizedSingleEntry } from "./SingleEntry";
 import { UserInfoContext } from "../../context/UserInfoContext";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import StopIcon from "@mui/icons-material/Stop";
+import { omit } from "lodash";
 
 export const Entries = ({ date }) => {
   const { data, loading } = useAllEntriesFilterByDate(date);
@@ -33,7 +36,23 @@ export const Entries = ({ date }) => {
     }
   }, [data]);
 
-  const addNewEntry = (e, order, startTime) => {
+  const getTagBundleOptions = () => {
+    const tagBundles = userInfo.tagBundles;
+    if (!tagBundles) return [];
+    return tagBundles.map((tb) => tb.name);
+  };
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(
+      entries
+        .map((e) => {
+          return `${e.startTime} ${e.endTime} ${e.tag?.tagBundle.name}-${e.tag?.name}`;
+        })
+        .join("\n")
+    );
+  };
+
+  const addNewEntry = (e, order, startTime, currentEntry) => {
     let orderNo = 0;
     if (order === undefined) {
       entries.length > 0 ? (orderNo = minOrderNo - 1) : (orderNo = 0);
@@ -41,17 +60,18 @@ export const Entries = ({ date }) => {
       orderNo = order + 1;
       let entriesToUpdate = entriesAfterOrderNo(orderNo);
       entriesToUpdate = incrementEntryOrders(entriesToUpdate);
-      entriesToUpdate.forEach((entry) => {
-        let { entryId, ...rest } = entry;
-        updateEntry({
-          variables: { entryId: entryId, record: rest },
-        });
+      [currentEntry, ...entriesToUpdate].forEach((entry) => {
+        let { _id, ...rest } = entry;
+        updateSingleEntry(_id, rest);
       });
     } else {
       orderNo = maxOrderNo + 1;
+      updateSingleEntry(currentEntry._id, omit(currentEntry, "_id"));
     }
     let time = startTime;
-    if (!startTime) time = currentTime();
+    if (!time) {
+      time = currentTime();
+    }
     addEntry({
       variables: {
         record: { startTime: time, date: date, order: orderNo },
@@ -59,8 +79,28 @@ export const Entries = ({ date }) => {
     });
   };
 
+  const updateSingleEntry = (id, entry) => {
+    updateEntry({
+      variables: {
+        entryId: id,
+        record: entry,
+      },
+    });
+  };
+
   const entriesAfterOrderNo = (order) => {
-    return entries.filter((e) => e.order >= order);
+    return entries
+      .filter((e) => e.order >= order)
+      .map((entry) => {
+        return {
+          _id: entry._id,
+          tagName: entry.tag?.name,
+          tagBundleName: entry.tag?.tagBundle.name,
+          startTime: entry.startTime,
+          endTime: entry.endTime,
+          order: entry.order,
+        };
+      });
   };
 
   const incrementEntryOrders = (entryArr) => {
@@ -99,6 +139,21 @@ export const Entries = ({ date }) => {
             newEntryHandler={addNewEntry}
           />
         ))}
+      </Stack>
+      <Stack
+        direction="row"
+        sx={{
+          position: "fixed",
+          bottom: "10%",
+          right: "10%",
+          backgroundColor: "white",
+          borderRadius: "1em",
+          border: "1px solid lightgray",
+        }}
+      >
+        <Button onClick={handleCopy}>
+          <ContentCopyIcon />
+        </Button>
       </Stack>
     </Box>
   );
