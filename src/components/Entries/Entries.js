@@ -43,11 +43,14 @@ export const Entries = ({ date }) => {
   };
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(entries.map((e) => {
-      console.log(e);
-      return `${e.startTime} ${e.endTime} ${e.tag?.tagBundle.name}-${e.tag?.name}`
-    }).join("\n"));
-  }
+    navigator.clipboard.writeText(
+      entries
+        .map((e) => {
+          return `${e.startTime} ${e.endTime} ${e.tag?.tagBundle.name}-${e.tag?.name}`;
+        })
+        .join("\n")
+    );
+  };
 
   const addNewEntry = (e, order, startTime, currentEntry) => {
     let orderNo = 0;
@@ -55,7 +58,6 @@ export const Entries = ({ date }) => {
       entries.length > 0 ? (orderNo = minOrderNo - 1) : (orderNo = 0);
     } else if (maxOrderNo > order) {
       orderNo = order + 1;
-      console.log(currentEntry, entries);
       let entriesToUpdate = entriesAfterOrderNo(orderNo);
       entriesToUpdate = incrementEntryOrders(entriesToUpdate);
       [currentEntry, ...entriesToUpdate].forEach((entry) => {
@@ -67,9 +69,7 @@ export const Entries = ({ date }) => {
       updateSingleEntry(currentEntry._id, omit(currentEntry, "_id"));
     }
     let time = startTime;
-    console.log("costam", startTime)
     if (!time) {
-      console.log("no start time")
       time = currentTime();
     }
     addEntry({
@@ -86,7 +86,7 @@ export const Entries = ({ date }) => {
         record: entry,
       },
     });
-  }
+  };
 
   const entriesAfterOrderNo = (order) => {
     return entries

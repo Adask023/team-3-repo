@@ -10,7 +10,7 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import useDeleteEntry from "../../mutations/useDeleteEntry";
 import useUpdateEntry from "../../mutations/useUpdateEntry";
@@ -26,7 +26,8 @@ const SingleEntry = ({ entryData, tagBundles, newEntryHandler }) => {
     tagBundleName: entryData.tag ? entryData.tag.tagBundle.name : "",
     tagName: entryData.tag ? entryData.tag.name : "",
   };
-  const [entryValues, setEntryValues] = useState(initialValues);
+  const formRef = useRef();
+
   const [endTime, setEndTime] = useState("");
   const [deleteEntry] = useDeleteEntry();
   const [updateEntry] = useUpdateEntry();
@@ -51,15 +52,12 @@ const SingleEntry = ({ entryData, tagBundles, newEntryHandler }) => {
   };
 
   const handleAddNewEntry = () => {
-    const currentEntryEndTime = currentTime();
-    const entryValObj = { ...entryValues };
+    const entryValObj = formRef.current.values;
     if (entryValObj.endTime === "") {
-      entryValObj.endTime = currentEntryEndTime;
+      entryValObj.endTime = currentTime();
     }
-    let newEntryStartTime = endTime;
-    setEntryValues(entryValObj);
     const _id = entryData._id;
-    newEntryHandler(null, entryData.order, newEntryStartTime, {
+    newEntryHandler(null, entryData.order, entryValObj.endTime, {
       _id,
       ...entryValObj,
     });
@@ -71,6 +69,7 @@ const SingleEntry = ({ entryData, tagBundles, newEntryHandler }) => {
       onSubmit={handleSubmit}
       initialValues={initialValues}
       isInitialValid={false}
+      innerRef={formRef}
     >
       {({
         handleChange,
@@ -108,9 +107,7 @@ const SingleEntry = ({ entryData, tagBundles, newEntryHandler }) => {
                   handleChange(e);
                   setEndTime(e.target.value);
                 }}
-                value={
-                  values.endTime === "" ? entryValues.endTime : values.endTime
-                }
+                value={values.endTime}
               />
               <FormControl sx={{ minWidth: 150, maxWidth: 150 }}>
                 <InputLabel>Tag Bundle</InputLabel>
