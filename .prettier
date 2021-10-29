@@ -1,6 +1,6 @@
 {
   "arrowParens": "avoid",
-  "bracketSpacing": false,
+  "bracketSpacing": true,
   "htmlWhitespaceSensitivity": "ignore",
   "insertPragma": false,
   "jsxBracketSameLine": false,
@@ -14,6 +14,5 @@
   "tabWidth": 2,
   "trailingComma": "es5",
   "useTabs": false,
-  "importOrder": ["^@core/(.*)$", "^@server/(.*)$", "^@ui/(.*)$", "^[./]"],
-  "importOrderSeparation": true
+  "endOfLine": "auto"
 }

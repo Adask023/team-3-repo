@@ -1,4 +1,3 @@
-/*eslint-disable*/
 import React from "react";
 
 export const PageNotFound = () => {
@@ -47,6 +46,7 @@ export const PageNotFound = () => {
           textAlign: "right",
           color: "#1976d2",
           margin: "0",
+          width: "100%",
         }}
       >
         <p style={{ p }}>

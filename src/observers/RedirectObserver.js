@@ -1,4 +1,3 @@
-/*eslint-disable*/
 import { useEffect } from "react";
 import { useContext } from "react";
 import { useHistory, useLocation } from "react-router";
@@ -17,7 +16,7 @@ export const RedirectObserver = ({ children }) => {
     if (!userInfo) push(ROUTES.LOGIN);
     if (pathname === ROUTES.LOGIN && userInfo) push(ROUTES.START);
     if (pathname === ROUTES.START && userInfo) push(ROUTES.CALENDAR);
-    if (!findRoute) push(ROUTES.NOT_FOUND);
+    // if (!findRoute) push(ROUTES.NOT_FOUND);
   }, [pathname, push, userInfo, findRoute]);
 
   return children;

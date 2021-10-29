@@ -1,4 +1,3 @@
-/*eslint-disable*/
 import { gql, useQuery } from "@apollo/client";
 import {
   Button,

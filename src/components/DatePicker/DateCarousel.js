@@ -1,30 +1,18 @@
-/*eslint-disable*/
 import { Button } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useMemo } from "react";
+import React, { useCallback } from "react";
 import { useEffect, useState } from "react";
-import { isDateEqualYMD } from "../../utils/dateUtils";
 
+import { isDateEqualYMD } from "../../utils/dateUtils";
 import { MaterialDatePicker } from "./MaterialDatePicker";
 
 export const DateCarousel = ({ onDateChange, dateValue }) => {
-  const now = useMemo(() => new Date(), []);
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const [value, setValue] = useState(dateValue);
   const [nextDisabled, setNextDisabled] = useState(false);
 
-  useEffect(() => {
-    if (dateValue) setValue(dateValue);
-    setNextDisabled(isMaxDate());
-  }, [dateValue]);
-
-  const handleDayChange = (e, val) => {
-    changeDate(val);
-  };
-
-  const isMaxDate = () => {
-    return isDateEqualYMD(now, value);
-  };
+  const isMaxDate = useCallback(() => {
+    return isDateEqualYMD(new Date(), value);
+  }, [value]);
 
   const changeDate = (val) => {
     const dateNew = new Date(value);
@@ -34,23 +22,29 @@ export const DateCarousel = ({ onDateChange, dateValue }) => {
       onDateChange(dateNew);
     }
   };
+  useEffect(() => {
+    if (dateValue) setValue(dateValue);
+    setNextDisabled(isMaxDate());
+  }, [dateValue, isMaxDate]);
 
   return (
     <Box
       sx={{
-        border: 1,
         p: 1,
         m: 1,
         display: "flex",
         width: "fit-content",
+        border: "1px solid #cacaca",
+        borderRadius: "1em",
       }}
     >
-      <Button onClick={(e) => handleDayChange(e, -1)}>Prev</Button>
+      <Button onClick={() => changeDate(-1)}>Prev</Button>
       <MaterialDatePicker
         onDateChange={(newDate) => onDateChange(newDate)}
         dateValue={dateValue}
+        maxDate={new Date()}
       />
-      <Button onClick={(e) => handleDayChange(e, 1)} disabled={nextDisabled}>
+      <Button onClick={() => changeDate(1)} disabled={nextDisabled}>
         Next
       </Button>
     </Box>

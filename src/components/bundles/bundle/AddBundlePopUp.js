@@ -1,4 +1,3 @@
-/*eslint-disable*/
 import { gql, useMutation } from "@apollo/client";
 import AddIcon from "@mui/icons-material/Add";
 import {

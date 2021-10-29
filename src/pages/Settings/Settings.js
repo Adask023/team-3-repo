@@ -25,7 +25,7 @@ export const Settings = () => {
   const [ render, setRender ] = useState( )
   // if (error) return <div className="">Error: </div>;
   // if (loading) return <div className="">Loading...</div>;
-  console.log(userInfo?.tagBundles)
+  console.log(userInfo)
   useEffect( () => {
     setRender(data?.tagBundleMany)
     // userInfo?.tagBundle ? userInfo.tagBundles : setUserInfo({...userInfo, tagBundles: dataUser?.getProfile.tagBundles})
@@ -38,8 +38,11 @@ export const Settings = () => {
             bundleId: item._id,
           },
         });
-        // console.log(userInfo.tagBundles)
-        // setUserInfo({...userInfo, tagBundles: userInfo.tagBundles.push(item)});
+        let tags = [...userInfo.tagBundles, item]
+        setUserInfo({...userInfo, tagBundles: tags})
+        console.log(tags)
+        console.log(userInfo.tagBundles)
+        // return tags;
       }
       if (!e.target.checked) {
         deleteBundleId({
@@ -47,6 +50,7 @@ export const Settings = () => {
             bundleId: item._id,
           },
         });
+        console.log(userInfo.tagBundles)
         // setUserInfo(userInfo?.tagBundle.filter((itemNew) => itemNew !== item))
       }
     },
@@ -80,7 +84,7 @@ export const Settings = () => {
   // console.log(userInfo)
   return (
     <Container>
-      {/* <h2>Witaj, {userInfo?.oauthId} !</h2> */}
+      <h2>Witaj, {userInfo?.oauthId} !</h2>
       <Input style={{ marginTop: "5rem" }} onChange={handleFilter} />
       <h5>Find bundle</h5>
       <Grid container style={{ margin: "3rem 0" }}>
