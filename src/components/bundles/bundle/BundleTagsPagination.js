@@ -1,5 +1,6 @@
 import { gql, useQuery } from "@apollo/client";
 import {
+  CircularProgress,
   FormControl,
   InputLabel,
   NativeSelect,
@@ -36,7 +37,12 @@ function BundleTagsPagination({ _id }) {
   //   }
   // }, [loading, data]);
 
-  if (loading) return <div>loading...</div>;
+  if (loading)
+    return (
+      <div>
+        <CircularProgress />
+      </div>
+    );
   if (error) return <div>error</div>;
 
   // CONSOLE LOG ------------------------------------
