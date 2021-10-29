@@ -1,16 +1,17 @@
 import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 
-export const getNewClient = (username) => {
+export const getNewClient = (bearer) => {
+  console.log(bearer);
   const httpLink = createHttpLink({
-    uri: process.env.REACT_APP_API_KEY,
+    uri: process.env.REACT_APP_API_URL,
   });
 
   const authLink = setContext((_, { headers }) => {
     return {
       headers: {
         ...headers,
-        "user-name": username ? username : "",
+        Authorization: `Bearer ${bearer}`,
       },
     };
   });

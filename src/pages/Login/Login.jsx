@@ -1,5 +1,6 @@
 //FIXME: importy...
 
+import { useAuth0 } from "@auth0/auth0-react";
 import {
   Button,
   FormControl,
@@ -15,6 +16,7 @@ import UserInfoContext from "../../context/UserInfoContext";
 
 export const Login = () => {
   const { setUserInfo } = useContext(UserInfoContext);
+  const { loginWithRedirect } = useAuth0();
 
   const logIn = useCallback(
     ({ login }) => {
@@ -92,6 +94,17 @@ export const Login = () => {
           );
         }}
       </Formik>
+      <Button
+        sx={{
+          width: "150px",
+          mt: 2,
+        }}
+        type="submit"
+        variant="contained"
+        onClick={loginWithRedirect}
+      >
+        OAUTH
+      </Button>
     </Box>
   );
 };

@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+import { useAuth0 } from "@auth0/auth0-react";
 import { Button } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
@@ -11,10 +13,12 @@ import UserInfoContext from "../../context/UserInfoContext";
 export const Navbar = () => {
   const { setUserInfo } = useContext(UserInfoContext);
   const { push } = useHistory();
+  const { logout: oAuthLogout } = useAuth0();
+
   const logout = useCallback(() => {
     setUserInfo(null);
-    push(ROUTES.LOGIN);
-  }, [push, setUserInfo]);
+    oAuthLogout();
+  }, [oAuthLogout, setUserInfo]);
 
   return (
     <Box
