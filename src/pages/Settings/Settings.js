@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import { useMutation, useQuery } from "@apollo/client";
 import { CircularProgress } from "@mui/material";
 import Box from "@mui/material/Box";
@@ -24,8 +25,10 @@ export const Settings = () => {
   const [ render, setRender ] = useState( )
   // if (error) return <div className="">Error: </div>;
   // if (loading) return <div className="">Loading...</div>;
+  console.log(userInfo)
   useEffect( () => {
     setRender(data?.tagBundleMany)
+    // userInfo?.tagBundle ? userInfo.tagBundles : setUserInfo({...userInfo, tagBundles: dataUser?.getProfile.tagBundles})
   },[data] )
   const handleChange = useCallback(
     (e, item) => {
@@ -35,8 +38,11 @@ export const Settings = () => {
             bundleId: item._id,
           },
         });
-        setUserInfo({...userInfo});
-        //tutaj jest błąd, muszę zwrócić obiekt a potem dopiero zrwócić tablicę z nową wartością 
+        let tags = [...userInfo.tagBundles, item]
+        setUserInfo({...userInfo, tagBundles: tags})
+        console.log(tags)
+        console.log(userInfo.tagBundles)
+        // return tags;
       }
       if (!e.target.checked) {
         deleteBundleId({
@@ -44,7 +50,8 @@ export const Settings = () => {
             bundleId: item._id,
           },
         });
-        setUserInfo({...userInfo, tagBundles: userInfo.tagBundles.filter((itemNew) => itemNew !== item)})
+        console.log(userInfo.tagBundles)
+        // setUserInfo(userInfo?.tagBundle.filter((itemNew) => itemNew !== item))
       }
     },
     [assignBundleId, deleteBundleId]
@@ -73,8 +80,8 @@ export const Settings = () => {
     </Box>
   );
   // console.log(data?.tagBundleMany);
-  // console.log(dataUser?.getProfile.oauthId);
-  console.log(userInfo)
+  // console.log(dataUser?.getProfile.tagBundles);
+  // console.log(userInfo)
   return (
     <Container>
       <h2>Witaj, {userInfo?.oauthId} !</h2>
@@ -83,7 +90,7 @@ export const Settings = () => {
       <Grid container style={{ margin: "3rem 0" }}>
         {dataUser
           ? render?.map((item) => {
-              let checked = userInfo.tagBundles.find(
+              let checked = dataUser?.getProfile.tagBundles.find(
                 (bundle) => bundle._id === item._id
               );
               return (
