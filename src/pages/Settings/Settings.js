@@ -21,12 +21,13 @@ export const Settings = () => {
   const { data: dataUser } = useQuery(SHOW_USER_BUNDLES);
   const [assignBundleId] = useMutation(ADD_USERS_BUNDLE);
   const [deleteBundleId] = useMutation(DELETE_USER_BUNDLE);
-  const { userInfo } = useContext(UserInfoContext);
+  // const { userInfo, setUserInfo } = useContext(UserInfoContext);
   const [ render, setRender ] = useState( )
   // if (error) return <div className="">Error: </div>;
   // if (loading) return <div className="">Loading...</div>;
   useEffect( () => {
     setRender(data?.tagBundleMany)
+    // userInfo?.tagBundle ? userInfo.tagBundles : setUserInfo({...userInfo, tagBundles: dataUser?.getProfile.tagBundles})
   },[data] )
   const handleChange = useCallback(
     (e, item) => {
@@ -36,9 +37,8 @@ export const Settings = () => {
             bundleId: item._id,
           },
         });
-        console.log(userInfo)
-        // setUserInfo({...userInfo});
-        //tutaj jest błąd, muszę zwrócić obiekt a potem dopiero zrwócić tablicę z nową wartością 
+        console.log(userInfo.tagBundles)
+        // setUserInfo({...userInfo, tagBundles: userInfo.tagBundles.push(item)});
       }
       if (!e.target.checked) {
         deleteBundleId({
@@ -46,7 +46,7 @@ export const Settings = () => {
             bundleId: item._id,
           },
         });
-        // setUserInfo(userInfo.filter((itemNew) => itemNew !== item))
+        // setUserInfo(userInfo?.tagBundle.filter((itemNew) => itemNew !== item))
       }
     },
     [assignBundleId, deleteBundleId]
@@ -74,12 +74,12 @@ export const Settings = () => {
       <CircularProgress />
     </Box>
   );
-  console.log(data?.tagBundleMany);
-  console.log(dataUser?.getProfile.tagBundles);
-  console.log(userInfo)
+  // console.log(data?.tagBundleMany);
+  // console.log(dataUser?.getProfile.tagBundles);
+  // console.log(userInfo)
   return (
     <Container>
-      <h2>Witaj, {userInfo?.oauthId} !</h2>
+      {/* <h2>Witaj, {userInfo?.oauthId} !</h2> */}
       <Input style={{ marginTop: "5rem" }} onChange={handleFilter} />
       <h5>Find bundle</h5>
       <Grid container style={{ margin: "3rem 0" }}>

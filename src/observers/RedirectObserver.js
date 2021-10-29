@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import { useEffect } from "react";
 import { useContext } from "react";
 import { useHistory, useLocation } from "react-router";

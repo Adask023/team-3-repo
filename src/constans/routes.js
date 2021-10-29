@@ -1,3 +1,4 @@
+/*eslint-disable*/
 export const ROUTES = {
   START: "/",
   LOGIN: "/login",

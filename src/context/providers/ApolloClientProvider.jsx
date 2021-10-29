@@ -22,6 +22,7 @@ export const ApolloClientProvider = ({ children }) => {
       .then((result) => {
         if (result.data.getProfile.oauthId === userInfo?.oauthId) {
           setUserInfo(result.data.getProfile);
+          console.log(result)
         }
       });
   }, [client, setUserInfo, userInfo, location]);

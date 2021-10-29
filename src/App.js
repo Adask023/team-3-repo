@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import React from "react";
 
 import { AppProvider } from "./context/providers/AppProvider";

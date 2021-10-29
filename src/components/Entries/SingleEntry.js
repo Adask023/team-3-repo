@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import {
@@ -8,16 +9,15 @@ import {
   MenuItem,
   Select,
   Stack,
-  TextField,
+  TextField
 } from "@mui/material";
-import { useState } from "react";
-
+import { Form, Formik } from "formik";
+import React, { useState } from "react";
 import useDeleteEntry from "../../mutations/useDeleteEntry";
 import useUpdateEntry from "../../mutations/useUpdateEntry";
-import { currentTime } from "../../utils/dateUtils";
-import React from "react";
-import { Form, Formik } from "formik";
 import { singleEntrySchema } from "../../schemas/singleEntrySchema";
+import { currentTime } from "../../utils/dateUtils";
+
 
 const SingleEntry = ({ entryData, tagBundles, newEntryHandler }) => {
   const initialValues = {

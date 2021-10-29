@@ -3,15 +3,18 @@ import { Box } from "@mui/system";
 import React from "react";
 import { useCallback } from "react";
 import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 import { ROUTES } from "../../constans/routes";
 import UserInfoContext from "../../context/UserInfoContext";
 
 export const Navbar = () => {
   const { setUserInfo } = useContext(UserInfoContext);
-
-  const logout = useCallback(() => setUserInfo(null), [setUserInfo]);
+  const { push } = useHistory();
+  const logout = useCallback(() => {
+    setUserInfo(null);
+    push(ROUTES.LOGIN);
+  }, [push, setUserInfo]);
 
   return (
     <Box
@@ -20,24 +23,34 @@ export const Navbar = () => {
         display: "flex",
         px: 2,
         py: 1,
-        background: "#46505A",
+        background: "#E7E5E5",
         alignItems: "center",
       }}
     >
       <Box
         sx={{
+          ml: 3,
           "& a": {
-            mr: 3,
+            mr: 4,
           },
         }}
       >
-        <Link to={ROUTES.CALENDAR}>Calendar</Link>
-        <Link to={ROUTES.BUNDLE}>Bundle</Link>
-        <Link to={ROUTES.SETTINGS}>Settings</Link>
+        <Button
+          size="large"
+          variant="text"
+          onClick={() => push(ROUTES.CALENDAR)}
+        >
+          Calendar
+        </Button>
+        <Button variant="text" onClick={() => push(ROUTES.BUNDLE)}>
+          Bundle
+        </Button>
+        <Button variant="text" onClick={() => push(ROUTES.SETTINGS)}>
+          Settings
+        </Button>
       </Box>
 
       <Button
-        variant="contained"
         sx={{
           ml: "auto",
           height: "40px",

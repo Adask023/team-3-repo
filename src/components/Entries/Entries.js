@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-import useGetAllEntries from "../../queries/useAllEntries";
-=======
 /* eslint-disable */
 //FIXME:: imports
 import { Button, CircularProgress, Stack } from "@mui/material";
@@ -15,20 +12,14 @@ import { UserInfoContext } from "../../context/UserInfoContext";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import StopIcon from "@mui/icons-material/Stop";
 import { omit } from "lodash";
->>>>>>> 13b269b8e9d9f0ba3767ecf2e17c57a00463a6c2
 
-export const Entries = () => {
+export const Entries = ({ date }) => {
+  const { data, loading } = useAllEntriesFilterByDate(date);
+  const [addEntry] = useCreateNewEntry();
+  const [updateEntry] = useUpdateEntry();
+  const [entries, setEntries] = useState(data);
+  const { userInfo } = useContext(UserInfoContext);
 
-<<<<<<< HEAD
-const {data} = useGetAllEntries()
-
-  return (
-    <>
-      {data?.entryMany.map((e) => (
-        <p key={e._id}>{e.tag.name}  {e._id}</p>
-      ))}
-    </>
-=======
   const orderNoArray = useMemo(() => {
     if (!entries) return [0];
     if (entries.length === 0) return [0];
@@ -165,7 +156,5 @@ const {data} = useGetAllEntries()
         </Button>
       </Stack>
     </Box>
->>>>>>> 13b269b8e9d9f0ba3767ecf2e17c57a00463a6c2
   );
 };
-
