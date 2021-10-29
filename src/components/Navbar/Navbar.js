@@ -11,10 +11,7 @@ import UserInfoContext from "../../context/UserInfoContext";
 export const Navbar = () => {
   const { setUserInfo } = useContext(UserInfoContext);
   const { push } = useHistory();
-  const logout = useCallback(() => {
-    setUserInfo(null);
-    push(ROUTES.LOGIN);
-  }, [push, setUserInfo]);
+  const logout = useCallback(() => setUserInfo(null), [setUserInfo]);
 
   return (
     <Box

@@ -21,10 +21,11 @@ export const Settings = () => {
   const { data: dataUser } = useQuery(SHOW_USER_BUNDLES);
   const [assignBundleId] = useMutation(ADD_USERS_BUNDLE);
   const [deleteBundleId] = useMutation(DELETE_USER_BUNDLE);
-  // const { userInfo, setUserInfo } = useContext(UserInfoContext);
+  const { userInfo, setUserInfo } = useContext(UserInfoContext);
   const [ render, setRender ] = useState( )
   // if (error) return <div className="">Error: </div>;
   // if (loading) return <div className="">Loading...</div>;
+  console.log(userInfo?.tagBundles)
   useEffect( () => {
     setRender(data?.tagBundleMany)
     // userInfo?.tagBundle ? userInfo.tagBundles : setUserInfo({...userInfo, tagBundles: dataUser?.getProfile.tagBundles})
@@ -37,7 +38,7 @@ export const Settings = () => {
             bundleId: item._id,
           },
         });
-        console.log(userInfo.tagBundles)
+        // console.log(userInfo.tagBundles)
         // setUserInfo({...userInfo, tagBundles: userInfo.tagBundles.push(item)});
       }
       if (!e.target.checked) {
