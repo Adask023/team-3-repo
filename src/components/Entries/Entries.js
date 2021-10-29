@@ -36,12 +36,6 @@ export const Entries = ({ date }) => {
     }
   }, [data]);
 
-  const getTagBundleOptions = () => {
-    const tagBundles = userInfo.tagBundles;
-    if (!tagBundles) return [];
-    return tagBundles.map((tb) => tb.name);
-  };
-
   const handleCopy = () => {
     navigator.clipboard.writeText(
       entries
@@ -144,8 +138,8 @@ export const Entries = ({ date }) => {
         direction="row"
         sx={{
           position: "fixed",
-          bottom: "10%",
-          right: "10%",
+          bottom: "50px",
+          right: "50px",
           backgroundColor: "white",
           borderRadius: "1em",
           border: "1px solid lightgray",
